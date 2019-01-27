@@ -1,9 +1,10 @@
 Package: oystr
 Version: 0.0.0.9000
-Title: What the Package Does (One Line, Title Case)
-Description: What the package does (one paragraph).
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-License: What license is it under?
+Title: Handle Personal Oyster Journey Data Provided by Transport for London
+Description: You can opt in to monthly emails from Transport for London that have your Oyster jouney history attached as a CSV. Functions in this small package help you read, wrangle and plot these data.
+Authors@R: person("Matt", "Dray", email = "mwdray@gmail.com", role = c("aut", "cre"))
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 ByteCompile: true
+RoxygenNote: 6.0.1
