@@ -1,14 +1,15 @@
 Package: oystr
 Version: 0.0.0.9000
-Title: Handle Personal Oyster Journey Data Provided by Transport for London
-Description: You can opt-in to monthly emails from Transport for London that
+Title: Handle Personal Oyster Journey History Data Provided by Transport for London
+Description: You can opt-in to monthly emails from Transport for London (TfL) that
     have your Oyster journey history attached as a CSV. Functions in this small
-    package help you read, wrangle and plot these data.
+    package help you read, wrangle and plot these data. I, and this work, are
+    unaffiliated with Transport for London (TfL).
 Authors@R: person("Matt", "Dray", email = "mwdray@gmail.com", role = c("aut", "cre"))
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 ByteCompile: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Suggests: 
     testthat
