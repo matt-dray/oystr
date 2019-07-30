@@ -10,7 +10,7 @@ oy_read(path)
 \item{path}{A string describing a filepath to a folder of CSVs}
 }
 \value{
-A dataframe object.
+A data.frame object.
 }
 \description{
 Read Oyster-history CSV files from a folder
