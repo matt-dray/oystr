@@ -2,7 +2,7 @@
 % Please edit documentation in R/read.R
 \name{oy_read}
 \alias{oy_read}
-\title{Read Oyster-history CSV files from a folder}
+\title{Read Oyster journey history files}
 \usage{
 oy_read(path)
 }
@@ -13,5 +13,8 @@ oy_read(path)
 A data.frame object.
 }
 \description{
-Read Oyster-history CSV files from a folder
+Read one or more Oyster journey history files from a single folder
+    and combine them. Assumes journey histories are raw CSV files as received
+    by email from Transport for London. Ignores files that are not identified
+    as Oyster history journey files.
 }
