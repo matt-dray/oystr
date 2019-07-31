@@ -13,9 +13,9 @@ oy_cols(...)
 A named vector object.
 }
 \description{
-A named vector of colours from Transport for London's
-    \href{http://content.tfl.gov.uk/tfl-colour-standards-issue04.pdf}{colour
-    standard}. Includes corporate, mode-specific and safety colours, as well as London
+A named vector of hexadecimal colour values from Transport for London's
+    \href{http://content.tfl.gov.uk/tfl-colour-standards-issue04.pdf}{colour standard}.
+    Includes corporate, mode-specific and safety colours, as well as London
     Underground line colours.
 }
 \details{

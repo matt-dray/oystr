@@ -1,8 +1,8 @@
 #' Transport for London Colours
 #'
-#' @description A named vector of colours from Transport for London's
-#'     \href{http://content.tfl.gov.uk/tfl-colour-standards-issue04.pdf}{colour
-#'     standard}. Includes corporate, mode-specific and safety colours, as well as London
+#' @description A named vector of hexadecimal colour values from Transport for London's
+#'     \href{http://content.tfl.gov.uk/tfl-colour-standards-issue04.pdf}{colour standard}.
+#'     Includes corporate, mode-specific and safety colours, as well as London
 #'     Underground line colours.
 #' @param ... Provide either the names or indices of colours in the vector (see details).
 #' @details An empty call returns the whole vector. The colour names are as follows:
@@ -41,6 +41,7 @@ oy_cols <- function(...) {
     corporate_green = "#007229",
     corporate_black = "#000000",
     corporate_white = "#FFFFFF",
+
     transport_for_london = "#0019A8",
     line_elizabeth = "#9364CC",
     london_overground = "#EF7B10",
@@ -56,7 +57,9 @@ oy_cols <- function(...) {
     london_coaches = "#F1AB00",
     docklands_light_railway = "#00AFAD",
     tfl_rail = "#0019A8",
+
     safety_blue = "#0060A8",
+
     line_bakerloo = "#B26300",
     line_hammersmith_city = "#F4A9BE",
     line_piccadilly = "#0019A8",
@@ -68,6 +71,7 @@ oy_cols <- function(...) {
     line_waterloo_city = "#93CEBA",
     line_district = "#007D32",
     line_northern = "#000000",
+
     oyster_blue = "#001df2",
     oyster_cyan = "#00f2f2",
     legible_london_blue = "061a30",
