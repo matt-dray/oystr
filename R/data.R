@@ -68,3 +68,21 @@ oy_read <- function(path) {
 
 }
 
+#' Clean Oyster journey history data
+#'
+#' @description Process a data.frame object containing Oyster journey history
+#'     data. . Could be a raw file as received by email from Transport for London
+#'     or the output from oy_read().
+#' @param df A data.frame object containing Oyster history journey.
+#' @return A data.frame object.
+#' @export
+
+oy_clean <- function(x) {
+
+  # Create datetime for start
+  x$Start <- as.POSIXct(paste(x$Date, x$Start.Time), "%d-%b-%Y %H:%M", tz = "GMT")
+  x$End <- as.POSIXct(paste(x$Date, x$End.Time), "%d-%b-%Y %H:%M", tz = "GMT")
+
+  return(x)
+
+}
