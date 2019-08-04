@@ -79,10 +79,20 @@ oy_read <- function(path) {
 
 oy_clean <- function(x) {
 
-  # Create datetime for start
+  # Date-times
   x$Start <- as.POSIXct(paste(x$Date, x$Start.Time), "%d-%b-%Y %H:%M", tz = "GMT")
   x$End <- as.POSIXct(paste(x$Date, x$End.Time), "%d-%b-%Y %H:%M", tz = "GMT")
+
+  # Day of the week
+  x$Start.Weekday <- weekdays(x$Start)
+  x$End.Weekday <- weekdays(x$End)
+
+  # Split stations (in form 'x to y')
+  # TODO: when it's a differnet mode of transport, or not a journey (e.g. top-up)
+  x$Station.Start <- sapply(strsplit(as.character(x$Journey.Action), " to "), "[", 1)
+  x$Station.End <- sapply(strsplit(as.character(x$Journey.Action), " to "), "[", 2)
 
   return(x)
 
 }
+
