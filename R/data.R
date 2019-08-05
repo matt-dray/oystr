@@ -13,7 +13,8 @@ oy_read <- function(path) {
   if (!is.character(path)) {
     stop(
       "You must provide a character string to the path argument.\n",
-      "You provided an object of class ", class(path)[1])
+      "You provided an object of class ", class(path)[1]
+    )
   }
 
   # Extract the CSV filenames
@@ -55,7 +56,7 @@ oy_read <- function(path) {
     Filter(f = function(x) { identical(names(x), match_cols) }, data_list_all)
 
   # Warning that elements were removed
-  if(length(data_list_subset) < length(data_list_all)) {
+  if (length(data_list_subset) < length(data_list_all)) {
     count_removed <- length(data_list_all) - length(data_list_subset)
     if(count_removed == 1) {
       cat(paste(count_removed, "element wasn't in the expected format and was discarded\n\n"))
@@ -87,9 +88,25 @@ oy_clean <- function(x) {
   # Make names lowercase and use underscore instead of period
   names(x) <- tolower(gsub("\\.", "_", names(x)))
 
+  # Date
+  x$date_start <- as.Date(x$date, format = "%d-%b-%Y")
+  x$date_end <- x$date_start  # new column, date class
+
   # Date-times
-  x$date_start <- as.POSIXct(paste(x$date, x$start_time), "%d-%b-%Y %H:%M", tz = "GMT")
-  x$date_end <- as.POSIXct(paste(x$date, x$end_time), "%d-%b-%Y %H:%M", tz = "GMT")
+  x$datetime_start <- as.POSIXct(paste(x$date, x$start_time), "%d-%b-%Y %H:%M", tz = "GMT")
+  x$datetime_end <- as.POSIXct(paste(x$date, x$end_time), "%d-%b-%Y %H:%M", tz = "GMT")
+
+  # Increment end_date by +1 where journey finishes after midnight
+  x$date_end <- as.Date(
+    ifelse(
+      test = format(x$datetime_start, '%H') %in% c("22", "23") & format(x$datetime_end, "%H") %in% c("00", "01", "02"),
+      yes = x$date_end + 1,
+      no = x$date_end
+    ),
+    origin = "1970-01-01"
+  )
+
+  # TODO: then recreate the datetime_end with the new end_date
 
   # Day of the week
   x$weekday_start <- weekdays(x$date_start)
@@ -102,7 +119,8 @@ oy_clean <- function(x) {
 
   # Retain only the columns of interest
   x <- x[, c(
-    "date_start", "date_end", "weekday_start", "weekday_end",
+    "date_start", "date_end",
+    "weekday_start", "weekday_end",
     "station_start", "station_end",
     "charge", "credit", "balance",
     "note"
@@ -111,4 +129,3 @@ oy_clean <- function(x) {
   return(x)
 
 }
-
