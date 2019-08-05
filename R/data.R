@@ -10,7 +10,7 @@
 
 oy_read <- function(path) {
 
-  if(!is.character(path)) {
+  if (!is.character(path)) {
     stop(
       "You must provide a character string to the path argument.\n",
       "You provided an object of class ", class(path)[1])
@@ -22,6 +22,11 @@ oy_read <- function(path) {
     pattern = "*.csv",  # must be a csv file
     full.names = TRUE   # returns full path
   )
+
+  # Warning if empty folder at provided path
+  if (length(data_paths) == 0) {
+    stop(paste("No CSV files found at filepath", path, "\n"))
+  }
 
   # Read the CSV files into a list
   data_list_all <- lapply(        # map to a list
@@ -79,18 +84,29 @@ oy_read <- function(path) {
 
 oy_clean <- function(x) {
 
+  # Make names lowercase and use underscore instead of period
+  names(x) <- tolower(gsub("\\.", "_", names(x)))
+
   # Date-times
-  x$Start <- as.POSIXct(paste(x$Date, x$Start.Time), "%d-%b-%Y %H:%M", tz = "GMT")
-  x$End <- as.POSIXct(paste(x$Date, x$End.Time), "%d-%b-%Y %H:%M", tz = "GMT")
+  x$date_start <- as.POSIXct(paste(x$date, x$start_time), "%d-%b-%Y %H:%M", tz = "GMT")
+  x$date_end <- as.POSIXct(paste(x$date, x$end_time), "%d-%b-%Y %H:%M", tz = "GMT")
 
   # Day of the week
-  x$Start.Weekday <- weekdays(x$Start)
-  x$End.Weekday <- weekdays(x$End)
+  x$weekday_start <- weekdays(x$date_start)
+  x$weekday_end <- weekdays(x$date_end)
 
   # Split stations (in form 'x to y')
   # TODO: when it's a differnet mode of transport, or not a journey (e.g. top-up)
-  x$Station.Start <- sapply(strsplit(as.character(x$Journey.Action), " to "), "[", 1)
-  x$Station.End <- sapply(strsplit(as.character(x$Journey.Action), " to "), "[", 2)
+  x$station_start <- sapply(strsplit(as.character(x$journey_action), " to "), "[", 1)
+  x$station_end <- sapply(strsplit(as.character(x$journey_action), " to "), "[", 2)
+
+  # Retain only the columns of interest
+  x <- x[, c(
+    "date_start", "date_end", "weekday_start", "weekday_end",
+    "station_start", "station_end",
+    "charge", "credit", "balance",
+    "note"
+  )]
 
   return(x)
 
