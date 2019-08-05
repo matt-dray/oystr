@@ -1,32 +1,33 @@
+<img src="https://raw.githubusercontent.com/matt-dray/stickers/master/output/oystr_hex.png" alt="Hexagonal sticker with an oystercatcher bird on it" width="150" align="right">
+
 # oystr
 
-**Package under development.**
+_R package and hex sticker under construction._
 
-# Description
+# Purpose
 
-Handle Personal Oyster Journey Data Provided by Transport for London.
+You can opt-in to monthly emails from [Transport for London](https://tfl.gov.uk/) (TfL) with your [Oyster](https://oyster.tfl.gov.uk/oyster/entry.do) public transport journey history attached as a CSV. Functions in this tiny package help you read and wrangle these data.
 
-You can opt-in to monthly emails from Transport for London that have your Oyster journey history attached as a CSV. Functions in this small package help you read, wrangle and plot these data.
-
-# Links
-
-* [Oyster online](https://oyster.tfl.gov.uk/oyster/entry.do)
-* [Transport for London](https://tfl.gov.uk/) (TfL)
-
-# Functions
-
-Some ideas for functions:
-
-* `oy_read` to read one or more files from a folder (assumes files are raw from TfL)
-* `oy_clean` to clean and tidy the data (e.g. separate out columns for 'from' and 'to' journey locations)
-* `oy_scatter` for continuous x- and y-axis plots
-* `oy_bar` for discrete x-axis plots 
-* `oy_pal` for an Oyster colour palette
-
-I'm hoping this will be an exercise in working with minimal dependencies. Hopefully zero.
+I, and this package, are not associated officially with TfL.
 
 # Install
 
-The package is under development with no gurantees.
+The package is under development with no guarantees whatsoever.
 
 Install with `remotes::install_github("matt-dray/oystr")`.
+
+# Functions
+
+Functions under development:
+
+* `oy_read()` reads multiple raw journey history files from a folder
+* `oy_clean()` cleans and engineers journey history data frame object (e.g. separate out columns for 'from' and 'to' journey locations)
+* `oy_cols` contains the TfL colour palette
+
+I may add some plotting functions to show journeys over time.
+
+# Dependencies
+
+Developing this package is an exercise in working with minimal dependencies (hopefully zero) and working with good ol' base R functions.
+
+I welcome issues and pull requests with your improvements and suggestions.
