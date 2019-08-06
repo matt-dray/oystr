@@ -96,6 +96,7 @@ oy_clean <- function(x) {
   x$datetime_start <- as.POSIXct(paste(x$date, x$start_time), "%d-%b-%Y %H:%M", tz = "GMT")
   x$datetime_end <- as.POSIXct(paste(x$date, x$end_time), "%d-%b-%Y %H:%M", tz = "GMT")
 
+
   # Date: increment end_date by +1 where journey finishes after midnight
   x$date_end <- as.Date(
     ifelse(
@@ -107,8 +108,10 @@ oy_clean <- function(x) {
   )
 
   # Datetime: recreate datetime_end with the updated date_end
-  # TODO: this currently fails (outputs NAs)
-  x$datetime_end <- as.POSIXct(paste(x$date_end, x$end_time), "%d-%b-%Y %H:%M", tz = "GMT")
+  x$datetime_end <- as.POSIXct(paste(x$date_end, x$end_time), "%Y-%m-%d %H:%M", tz = "GMT")
+
+  # Datetime: journey duration
+  x$journey_duration <- difftime(time2 = x$datetime_start, time1 = x$datetime_end, units = "mins", tz = "GMT")
 
   # Date: day of the week
   x$weekday_start <- weekdays(x$date_start)
@@ -139,6 +142,7 @@ oy_clean <- function(x) {
   )
 
   # Train: split stations (in form 'x to y')
+  # TODO: If it doesn't have 'to', then it should get an NA for station_start, rather than being filled
   x$station_start <- sapply(strsplit(as.character(x$journey_action), " to "), "[", 1)
   x$station_end <- sapply(strsplit(as.character(x$journey_action), " to "), "[", 2)
 
