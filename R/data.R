@@ -85,18 +85,18 @@ oy_read <- function(path) {
 
 oy_clean <- function(x) {
 
-  # Make names lowercase and use underscore instead of period
+  # Meta: make names lowercase and use underscore instead of period
   names(x) <- tolower(gsub("\\.", "_", names(x)))
 
-  # Date
+  # Date: make date class
   x$date_start <- as.Date(x$date, format = "%d-%b-%Y")
   x$date_end <- x$date_start  # new column, date class
 
-  # Date-times
+  # Datetime: create datetime
   x$datetime_start <- as.POSIXct(paste(x$date, x$start_time), "%d-%b-%Y %H:%M", tz = "GMT")
   x$datetime_end <- as.POSIXct(paste(x$date, x$end_time), "%d-%b-%Y %H:%M", tz = "GMT")
 
-  # Increment end_date by +1 where journey finishes after midnight
+  # Date: increment end_date by +1 where journey finishes after midnight
   x$date_end <- as.Date(
     ifelse(
       test = format(x$datetime_start, '%H') %in% c("22", "23") & format(x$datetime_end, "%H") %in% c("00", "01", "02"),
@@ -106,23 +106,54 @@ oy_clean <- function(x) {
     origin = "1970-01-01"
   )
 
-  # TODO: then recreate the datetime_end with the new end_date
+  # Datetime: recreate datetime_end with the updated date_end
+  # TODO: this currently fails (outputs NAs)
+  x$datetime_end <- as.POSIXct(paste(x$date_end, x$end_time), "%d-%b-%Y %H:%M", tz = "GMT")
 
-  # Day of the week
+  # Date: day of the week
   x$weekday_start <- weekdays(x$date_start)
   x$weekday_end <- weekdays(x$date_end)
 
-  # Split stations (in form 'x to y')
-  # TODO: when it's a differnet mode of transport, or not a journey (e.g. top-up)
+  # Pay: extract mode of transport
+  # TODO: rewrite with if(){}?
+  x$mode <- ifelse(
+    test = grepl("Bus journey", x$journey_action),
+    yes = "Bus",
+    no = ifelse(
+      test = (grepl(" to ", x$journey_action)),
+      yes = "Train",
+      no = NA
+    )
+  )
+
+  # Pay: extract type of payment
+  # TODO: rewrite with if(){}?
+  x$payment <- ifelse(
+    test = grepl("Season ticket", x$journey_action),
+    yes = "Season ticket",
+    no = ifelse(
+      test = (grepl("topped", x$journey_action)),
+      yes = "Top-up",
+      no = NA
+    )
+  )
+
+  # Train: split stations (in form 'x to y')
   x$station_start <- sapply(strsplit(as.character(x$journey_action), " to "), "[", 1)
   x$station_end <- sapply(strsplit(as.character(x$journey_action), " to "), "[", 2)
 
+  # Bus: extract route
+  x$bus_route <- ifelse(
+    test = x$mode == "Bus",
+    yes = gsub("Bus journey, route ", "", x$journey_action),
+    no = NA
+  )
+
   # Retain only the columns of interest
   x <- x[, c(
-    "date_start", "date_end",
-    "weekday_start", "weekday_end",
-    "station_start", "station_end",
-    "charge", "credit", "balance",
+    "datetime_start", "datetime_end", "weekday_start",
+    "mode", "station_start", "station_end", "bus_route",
+    "payment", "charge", "credit", "balance",
     "note"
   )]
 
