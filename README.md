@@ -2,6 +2,8 @@
 
 # oystr
 
+[![Travis build status](https://travis-ci.org/matt-dray/oystr.svg?branch=master)](https://travis-ci.org/matt-dray/oystr)
+
 _R package and hex sticker under construction._
 
 # Purpose
