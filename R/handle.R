@@ -26,7 +26,7 @@ oy_read <- function(path) {
 
   # Warning if empty folder at provided path
   if (length(data_paths) == 0) {
-    stop(paste("No CSV files found at filepath", path, "\n"))
+    stop(paste0("No CSV files found at filepath '", path, "'\n"))
   }
 
   # Read the CSV files into a list
