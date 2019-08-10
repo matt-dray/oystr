@@ -1,3 +1,6 @@
+^CODE_OF_CONDUCT\.md$
+^docs$
+^_pkgdown\.yml$
 ^codecov\.yml$
 ^\.travis\.yml$
 ^oystr\.Rproj$
