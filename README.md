@@ -28,9 +28,10 @@ Functions under development:
 * `oy_clean()` cleans journey history data
 * `oy_cols()` contains the TfL colour palette
 
-There's also an anonymised journey history data set:
+There's also anonymised journey history data:
 
-* `oy_history`
+* `journeys_read` is an example having been read in with `oy_read()`
+* `journeys_clean` is the result of using `oy_clean()` on the `journeys_read` data
 
 Maybe in future:
 
