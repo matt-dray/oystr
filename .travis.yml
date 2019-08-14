@@ -9,3 +9,11 @@ notifications:
   email:
     on_success: change
     on_failure: change
+
+# Add codecov coverage via {covr}
+
+r_github_packages:
+  - r-lib/covr
+
+after_success:
+  - Rscript -e 'covr::codecov()'
