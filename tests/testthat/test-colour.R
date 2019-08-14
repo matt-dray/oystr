@@ -17,8 +17,8 @@ test_that("valid character input vector returns vector", {
 
 test_that("non-vector input returns error", {
   test_list <- list(x = 1:3, y = 1:3)
-  expect_error(oy_cols(test_list))
   test_df <- data.frame(x = 1:3, y = 1:3)
+  expect_error(oy_cols(test_list))
   expect_error(oy_cols(test_df))
   # TODO: multidimensional arrays and matrices should fail
 })

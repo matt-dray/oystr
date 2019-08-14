@@ -1,9 +1,9 @@
 context("test-read")
 
 test_that("an invalid path results in an error", {
-  expect_error(oy_read(path = 1234))
-  expect_error(oy_read(path = "not a valid filepath"))
-  expect_error(oy_read(path = bare_string))
+  expect_error(oy_read(1234))
+  expect_error(oy_read("not a valid filepath"))
+  expect_error(oy_read(bare_string))
 })
 
 test_that("an empty folder results in a error", {
