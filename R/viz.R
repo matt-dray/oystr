@@ -78,9 +78,37 @@ oy_cols <- function(...) {
     legible_london_yellow = "#f0bb00"
   )
 
-  if (is.null(cols))
+  if (is.null(cols)) {
     return (oyster_colours)
+  }
 
-  oyster_colours[cols]
+  if (any(is.na(cols))) {
+    stop("Please provide colour names or indices only.")
+  }
+
+  if (is.numeric(cols) & max(cols) > length(oyster_colours)) {
+    stop(
+      "You've provided an index that's out of range.\n",
+      "Choose only values between 1 and ", length(oy_cols()), "."
+    )
+  }
+
+  if (is.character(cols) & !all(cols %in% names(oyster_colours))) {
+    stop(
+      "You've provided an invalid colour name.\n",
+      "See ?oy_cols for details or print colour names with names(oy_cols())."
+    )
+  }
+
+  if (!is.null(cols)) {
+    return(oyster_colours[cols])
+  }
+
+
+  # if mixed (indices/names/NA)
+  # return what you can -  (1, 2, NA, 100) should return 1 and 2
+  # 'did you mean?'
+  # passing dataframes, matrices, arrays, lists
+  # negative indices
 
 }
