@@ -13,7 +13,7 @@ oy_read <- function(path) {
   if (!is.character(path)) {
     stop(
       "You must provide a character string to the path argument.\n",
-      "You provided an object of class ", class(path)[1]
+      "You provided an object of class ", class(path)[1], ""
     )
   }
 
@@ -85,6 +85,15 @@ oy_read <- function(path) {
 
 oy_clean <- function(x) {
 
+  if(class(x) != "data.frame") {
+    stop(
+    "\nYou must provide an object of class data.frame.\n",
+    "You provided an object of class ", class(x)[1], "."
+    )
+  }
+
+  # TODO: additional stopping rules dependent on final shape/classes/column names
+
   # Meta: make names lowercase and use underscore instead of period
   names(x) <- tolower(gsub("\\.", "_", names(x)))
 
@@ -93,14 +102,15 @@ oy_clean <- function(x) {
   x$date_end <- x$date_start  # new column, date class
 
   # Datetime: create datetime
-  x$datetime_start <- as.POSIXct(paste(x$date, x$start_time), "%d-%b-%Y %H:%M", tz = "GMT")
+  x$datetime_start <- as.POSIXct(paste(x$date, x$start_time),"%d-%b-%Y %H:%M", tz = "GMT")
   x$datetime_end <- as.POSIXct(paste(x$date, x$end_time), "%d-%b-%Y %H:%M", tz = "GMT")
 
 
   # Date: increment end_date by +1 where journey finishes after midnight
   x$date_end <- as.Date(
     ifelse(
-      test = format(x$datetime_start, '%H') %in% c("22", "23") & format(x$datetime_end, "%H") %in% c("00", "01", "02"),
+      test = format(x$datetime_start, '%H') %in% c("22", "23") &
+        format(x$datetime_end, "%H") %in% c("00", "01", "02"),
       yes = x$date_end + 1,
       no = x$date_end
     ),
@@ -108,10 +118,18 @@ oy_clean <- function(x) {
   )
 
   # Datetime: recreate datetime_end with the updated date_end
-  x$datetime_end <- as.POSIXct(paste(x$date_end, x$end_time), "%Y-%m-%d %H:%M", tz = "GMT")
+  x$datetime_end <- as.POSIXct(
+    paste(x$date_end, x$end_time),
+    "%Y-%m-%d %H:%M",
+    tz = "GMT"
+  )
 
   # Datetime: journey duration
-  x$journey_duration <- difftime(time2 = x$datetime_start, time1 = x$datetime_end, units = "mins", tz = "GMT")
+  x$journey_duration <- difftime(
+    time2 = x$datetime_start,
+    time1 = x$datetime_end,
+    units = "mins", tz = "GMT"
+  )
 
   # Date: day of the week
   x$weekday_start <- weekdays(x$date_start)
