@@ -30,14 +30,14 @@ oy_read <- function(path) {
   }
 
   # Read the CSV files into a list
-  data_list_all <- lapply(        # map to a list
-    X = data_paths,               # for each file path...
-    FUN = function(x) read.csv(   # ...read the CSV file
-      file = x,                   # where x is each file path
-      stringsAsFactors = FALSE,   # strings to characters, not factors
-      skip = 1,                   # ignore blank first row
-      header = TRUE,              # the first (non-blank) row is headers
-      na.strings = ""             # replace blanks with NA
+  data_list_all <- lapply(               # map to a list
+    X = data_paths,                      # for each file path...
+    FUN = function(x) utils::read.csv(   # ...read the CSV file
+      file = x,                          # where x is each file path
+      stringsAsFactors = FALSE,          # strings to characters, not factors
+      skip = 1,                          # ignore blank first row
+      header = TRUE,                     # the first (non-blank) row is headers
+      na.strings = ""                    # replace blanks with NA
     )
   )
 
@@ -77,9 +77,9 @@ oy_read <- function(path) {
 #' Clean Oyster journey history data
 #'
 #' @description Process a data.frame object containing Oyster journey history
-#'     data. . Could be a raw file as received by email from Transport for London
+#'     data. Could be a raw file as received by email from Transport for London
 #'     or the output from oy_read().
-#' @param df A data.frame object containing Oyster history journey.
+#' @param x A data.frame object containing Oyster history journey.
 #' @return A data.frame object.
 #' @export
 
@@ -160,7 +160,7 @@ oy_clean <- function(x) {
   )
 
   # Train: split stations (in form 'x to y')
-  # TODO: If it doesn't have 'to', then it should get an NA for station_start, rather than being filled
+  # TODO: if it doesn't have 'to', then it should get an NA for station_start, rather than being filled
   x$station_start <- sapply(strsplit(as.character(x$journey_action), " to "), "[", 1)
   x$station_end <- sapply(strsplit(as.character(x$journey_action), " to "), "[", 2)
 
