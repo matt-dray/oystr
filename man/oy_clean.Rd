@@ -7,13 +7,13 @@
 oy_clean(x)
 }
 \arguments{
-\item{df}{A data.frame object containing Oyster history journey.}
+\item{x}{A data.frame object containing Oyster history journey.}
 }
 \value{
 A data.frame object.
 }
 \description{
 Process a data.frame object containing Oyster journey history
-    data. . Could be a raw file as received by email from Transport for London
+    data. Could be a raw file as received by email from Transport for London
     or the output from oy_read().
 }
