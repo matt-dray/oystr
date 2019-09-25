@@ -1,0 +1,105 @@
+---
+title: "Introduction to {oystr}"
+author: "Matt Dray"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{oystr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Background
+
+[Transport for London](https://tfl.gov.uk) (TfL) is responsible for the majority of the transport network in the UK's capital. Transport options include overground and underground trains, buses, trams and riverboats.
+
+TfL operates the [Oyster card](https://oyster.tfl.gov.uk/) system on its network. You can charge the card with funds and get access to the network by tapping in your card on a special reader.
+
+Your card has a unique number and this is recorded each time you 'tap in' and 'tap out' of the network. TfL stores this data for consumption by users for eight weeks. You can view your history on the TfL website or you can be sent a monthly digest by email.
+
+In both cases you can collect the data as a CSV file. This is in more of a human-readable form than machine-readable, which can make it difficult to perform further processing from a programmatic perspective.
+
+# Oyster data
+
+The CSV file is in the same format each time your receive or download it.
+
+```{r read_raw}
+# Read an anonymised CSV example
+example_raw <- read.csv("../inst/extdata/july.csv")
+
+# Print the first few rows
+head(example_raw)
+```
+
+You can immediately start to see some problems. For example:
+
+* the headers are in the first row because the first row of the CSV is blank
+* the date is recorded for the journey start, but the journey end could feasibly be a different day
+* Journey/Action contains multiple types of information, such as start and end stations
+
+The {oystr} package was written to help address these kinds of problems.
+
+# Reading the data
+
+The `oy_read()` function reads and combines CSV files of Oyster data that are in the expected format provided by TfL. The function takes one argument: a string that is the path to a folder containing your Oyster data files.  
+
+For example, the following file path contains some CSV files and some non-CSV files. Two of the CSVs are in the format supplied by TfL and one is not.
+
+```{r list_files}
+# File path to a folder containing oystr data 
+filepath <- "../inst/extdata/"
+
+# Print the file names at that path
+list.files(filepath)
+```
+
+In this example, `july.csv` and `august.csv` are legitimate files of Oyster data in TfL format. The other files aren't. So how to read the correct files and bind them together? 
+First load the {oystr} package.
+
+```{r library}
+# Uncomment and run this line to install if not already
+# remotes::install_github("matt-dray/oystr")
+
+# Load the package
+library(oystr)
+```
+
+Then you can use the `oy_read()` function. Pass it a file path to a folder containing your files.
+
+```{r oy_read}
+# Read data from a folder
+data_raw <- oy_read(filepath)
+```
+
+This gave a warning for one CSV file that was in the wrong format -- the function identified that it didn't contain Oyster data. The text file was ignored.
+
+```{r}
+str(data_raw)
+```
+
+There's still a number of problems after the data is read in and the blank first row is removed. For example:
+
+* dates and times are character types, not datettime
+* charge and credit are also character types
+* different types of data (bus trips and train journeys) are in the same `Journey.Action` column
+
+These can be fixed with the `oy_clean()` function.
+
+# Cleaning the data
+
+Having read the Oyster data files, you can clean up the formatting and engineer new features with `oy_read()`.
+
+```{r oy_clean}
+# Clean the output from oy_read()
+data_clean <- oy_clean(data_raw)
+
+# Print the first few rows
+str(data_clean) 
+```
