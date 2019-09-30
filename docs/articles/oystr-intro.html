@@ -82,11 +82,11 @@
 
     
     
-<div id="tldr" class="section level1">
+<div id="summary" class="section level1">
 <h1 class="hasAnchor">
-<a href="#tldr" class="anchor"></a>tl;dr</h1>
-<p>You can use the {oystr} package to process Oyster journey data in CSVs provided by Transport for London (TfL).</p>
-<p>Provide a file path to oy_read() that contains the CSVs, then use data_clean() to process the data and extract new features.</p>
+<a href="#summary" class="anchor"></a>Summary</h1>
+<p>You can use the {oystr} package to process <a href="https://oyster.tfl.gov.uk/">Oyster card</a> journey data in CSV files provided by <a href="https://tfl.gov.uk/">Transport for London</a> (TfL).</p>
+<p>Provide a file path to <code><a href="../reference/oy_read.html">oy_read()</a></code> that contains the CSVs, then use <code>data_clean()</code> to prepare the data and extract new features ready for further processing and summarisation.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"matt-dray/oystr"</span>)</a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(oystr)</a>
 <a class="sourceLine" id="cb1-3" title="3">data_raw &lt;-<span class="st"> </span><span class="kw"><a href="../reference/oy_read.html">oy_read</a></span>(<span class="dt">path =</span> <span class="st">"path/to/data"</span>)</a>
@@ -103,40 +103,36 @@
 <div id="oyster-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#oyster-data" class="anchor"></a>Oyster data</h1>
-<p>The CSV file is in the same format each time your receive or download it.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># Read an anonymised CSV example</span></a>
-<a class="sourceLine" id="cb2-2" title="2">example_raw &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.csv</a></span>(<span class="st">"../inst/extdata/july.csv"</span>)</a>
-<a class="sourceLine" id="cb2-3" title="3"></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="co"># Print the first few rows</span></a>
-<a class="sourceLine" id="cb2-5" title="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(example_raw)</a>
-<a class="sourceLine" id="cb2-6" title="6"><span class="co">#&gt;             X        X.1      X.2                    X.3    X.4    X.5</span></a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt; 1        Date Start Time End Time         Journey/Action Charge Credit</span></a>
-<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt; 2 31-Jul-2018      16:11    16:50 Station A to Station B      0   &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt; 3 31-Jul-2018      06:47    07:34 Station B to Station A      0   &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb2-10" title="10"><span class="co">#&gt; 4 28-Jul-2018      18:57    19:44 Station C to Station R      0   &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb2-11" title="11"><span class="co">#&gt; 5 28-Jul-2018      13:49    14:43 Station R to Station L      0   &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb2-12" title="12"><span class="co">#&gt; 6 26-Jul-2018      17:51    19:18 Station D to Station R      0   &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb2-13" title="13"><span class="co">#&gt;       X.6  X.7</span></a>
-<a class="sourceLine" id="cb2-14" title="14"><span class="co">#&gt; 1 Balance Note</span></a>
-<a class="sourceLine" id="cb2-15" title="15"><span class="co">#&gt; 2       8 &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb2-16" title="16"><span class="co">#&gt; 3       8 &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb2-17" title="17"><span class="co">#&gt; 4       8 &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb2-18" title="18"><span class="co">#&gt; 5       8 &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb2-19" title="19"><span class="co">#&gt; 6       8 &lt;NA&gt;</span></a></code></pre></div>
+<p>TfL provide the data in a consistent format. Here are the first few rows from an anonymised example where the locations and services have been replaced.</p>
+<pre><code>#&gt;             X        X.1      X.2                    X.3    X.4    X.5
+#&gt; 1        Date Start Time End Time         Journey/Action Charge Credit
+#&gt; 2 31-Jul-2018      16:11    16:50 Station A to Station B      0   &lt;NA&gt;
+#&gt; 3 31-Jul-2018      06:47    07:34 Station B to Station A      0   &lt;NA&gt;
+#&gt; 4 28-Jul-2018      18:57    19:44 Station C to Station R      0   &lt;NA&gt;
+#&gt; 5 28-Jul-2018      13:49    14:43 Station R to Station L      0   &lt;NA&gt;
+#&gt; 6 26-Jul-2018      17:51    19:18 Station D to Station R      0   &lt;NA&gt;
+#&gt;       X.6  X.7
+#&gt; 1 Balance Note
+#&gt; 2       8 &lt;NA&gt;
+#&gt; 3       8 &lt;NA&gt;
+#&gt; 4       8 &lt;NA&gt;
+#&gt; 5       8 &lt;NA&gt;
+#&gt; 6       8 &lt;NA&gt;</code></pre>
 <p>The resulting data frame has some problems. For example:</p>
 <ul>
 <li>the first row of the CSV is blank, so the column headers end up as the first row of data in the data frame</li>
 <li>the date is recorded for the journey start only, even thtough the journey end could be the next day</li>
 <li>Journey/Action contains multiple types of information, like the start station, end station and bus journeys</li>
+<li>the data types for each are not correct (<code>Date</code> is not in date-time format, for example)</li>
 </ul>
-<p>The aim of the {oystr} package is to help address these types of issues.</p>
+<p>The aim of the {oystr} package is to help address these issues and more.</p>
 </div>
 <div id="reading-the-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#reading-the-data" class="anchor"></a>Reading the data</h1>
 <p>The <code><a href="../reference/oy_read.html">oy_read()</a></code> function reads and combines multiple CSV files of Oyster data. The function takes one argument: a string that is the path to a folder containing your Oyster data files.</p>
-<p>The names of the files don’t matter, but the structure must be in the format provided by TfL.</p>
-<p>For example, the file path in the following chunk has four files: two are CSVs containing monthly Oyster data in the format supplied by TfL (<code>july.csv</code> and <code>august.csv</code>) and the other two are a CSV and a text file that don’t contain Oyster data (<code>not_oyster.csv</code> and <code>not_oyster.txt</code>).</p>
+<p>The names of the files don’t matter, but the structure of each of them must be in the format provided by TfL.</p>
+<p>For example, the file path in the example below leads to a folder containing four files: two are CSVs containing monthly Oyster data in the format supplied by TfL (<code>july.csv</code> and <code>august.csv</code>) and the other two are a CSV and a text file that don’t contain Oyster data (<code>not_oyster.csv</code> and <code>not_oyster.txt</code>).</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># File path to a folder containing oyster data</span></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="co"># Replace this path with your own</span></a>
 <a class="sourceLine" id="cb3-3" title="3">filepath &lt;-<span class="st"> "../inst/extdata/"</span></a>
@@ -209,15 +205,17 @@
 <a class="sourceLine" id="cb8-18" title="18"><span class="co">#&gt;  $ credit          : chr  "NA" "NA" "NA" "NA" ...</span></a>
 <a class="sourceLine" id="cb8-19" title="19"><span class="co">#&gt;  $ balance         : num  8 8 8 8 8 8 8 8 8 8 ...</span></a>
 <a class="sourceLine" id="cb8-20" title="20"><span class="co">#&gt;  $ note            : chr  "NA" "NA" "NA" "NA" ...</span></a></code></pre></div>
-<p>So what did oy_clean() do? You can see that we now have 13 variables rather than 8. This is because we had created:</p>
+<p>So what did <code><a href="../reference/oy_clean.html">oy_clean()</a></code> do? You can see there are some new and altered columns:</p>
 <ul>
-<li>date-times for start and end (takes into account journeys that start before midnight and end after)</li>
-<li>day of the week</li>
-<li>journey duration</li>
+<li>
+<a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a> date-times for the start and end of the journey, where applicable (takes into account journeys that start before midnight and end after)</li>
+<li>day of the week for separating work-week from weekend</li>
+<li>journey duration, a difftime object, in minutes</li>
 <li>the mode of travel (train, bus, etc)</li>
-<li>the start and end stations for train travel</li>
+<li>the start and end stations separated</li>
 <li>the number of the bus route</li>
 </ul>
+<p>The data are now in a suitable shape for further processing, such as summarisation and visualisation.</p>
 </div>
   </div>
 
@@ -226,7 +224,7 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#tldr">tl;dr</a></li>
+<li><a href="#summary">Summary</a></li>
       <li><a href="#background">Background</a></li>
       <li><a href="#oyster-data">Oyster data</a></li>
       <li><a href="#reading-the-data">Reading the data</a></li>
