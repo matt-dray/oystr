@@ -10,10 +10,27 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
+# Set options
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+# Load the package
+library(oystr)
+```
+
+# tl;dr
+
+You can use the {oystr} package to process Oyster journey data in CSVs provided by Transport for London (TfL).
+
+Provide a file path to oy_read() that contains the CSVs, then use data_clean() to process the data and extract new features.
+
+```{r tldr, eval=FALSE}
+remotes::install_github("matt-dray/oystr")
+library(oystr)
+data_raw <- oy_read(path = "path/to/data")
+data_clean <- oy_clean(x = data_raw)
 ```
 
 # Background
@@ -38,51 +55,73 @@ example_raw <- read.csv("../inst/extdata/july.csv")
 head(example_raw)
 ```
 
-You can immediately start to see some problems. For example:
+The resulting data frame has some problems. For example:
 
-* the headers are in the first row because the first row of the CSV is blank
-* the date is recorded for the journey start, but the journey end could feasibly be a different day
-* Journey/Action contains multiple types of information, such as start and end stations
+* the first row of the CSV is blank, so the column headers end up as the first row of data in the data frame 
+* the date is recorded for the journey start only, even thtough the journey end could be the next day
+* Journey/Action contains multiple types of information, like the start station, end station and bus journeys
 
-The {oystr} package was written to help address these kinds of problems.
+The aim of the {oystr} package is to help address these types of issues.
 
 # Reading the data
 
-The `oy_read()` function reads and combines CSV files of Oyster data that are in the expected format provided by TfL. The function takes one argument: a string that is the path to a folder containing your Oyster data files.  
+The `oy_read()` function reads and combines multiple CSV files of Oyster data. The function takes one argument: a string that is the path to a folder containing your Oyster data files.
 
-For example, the following file path contains some CSV files and some non-CSV files. Two of the CSVs are in the format supplied by TfL and one is not.
+The names of the files don't matter, but the structure must be in the format provided by TfL.
+
+For example, the file path in the following chunk has four files: two are CSVs containing monthly Oyster data in the format supplied by TfL (`july.csv` and `august.csv`) and the other two are a CSV and a text file that don't contain Oyster data (`not_oyster.csv` and `not_oyster.txt`).
 
 ```{r list_files}
-# File path to a folder containing oystr data 
+# File path to a folder containing oyster data
+# Replace this path with your own
 filepath <- "../inst/extdata/"
 
 # Print the file names at that path
 list.files(filepath)
 ```
 
-In this example, `july.csv` and `august.csv` are legitimate files of Oyster data in TfL format. The other files aren't. So how to read the correct files and bind them together? 
-First load the {oystr} package.
+So we need to read the two CSVs of Oyster data and ignore the others. The {oystr} package can help you. You can install it from GitHub and then load it.
 
-```{r library}
-# Uncomment and run this line to install if not already
-# remotes::install_github("matt-dray/oystr")
+```{r library-not-run, eval=FALSE}
+# Install the {remotes} package to help install {oystr} 
+install.packages("remotes")
+remotes::install_github("matt-dray/oystr")
 
 # Load the package
 library(oystr)
 ```
 
-Then you can use the `oy_read()` function. Pass it a file path to a folder containing your files.
+The functions of the {oystr} package are now available to you.
+
+Use the `oy_read()` function to read the data sets. To the 'path' argument provide a file path to a folder containing your files. Here I've used the filepath created in teh sectio above. 
 
 ```{r oy_read}
 # Read data from a folder
-data_raw <- oy_read(filepath)
+data_raw <- oy_read(path = filepath)
 ```
 
 This gave a warning for one CSV file that was in the wrong format -- the function identified that it didn't contain Oyster data. The text file was ignored.
 
+Let's take a look at the structure of the data. 
+
 ```{r}
 str(data_raw)
 ```
+
+So we have 
+
+The output data frame contains rows of data from both CSV files. We can tell because it has data from both months of the input data frames (July and August in this example).
+
+```{r july-august}
+# Count rows from each month of input data
+july <- sum(grepl("Jul", data_raw$Date))
+august <- sum(grepl("Aug", data_raw$Date))
+
+# Check their sum equals the output from oy_read()
+july + august == nrow(data_raw)
+```
+
+# Cleaning the data
 
 There's still a number of problems after the data is read in and the blank first row is removed. For example:
 
@@ -90,16 +129,21 @@ There's still a number of problems after the data is read in and the blank first
 * charge and credit are also character types
 * different types of data (bus trips and train journeys) are in the same `Journey.Action` column
 
-These can be fixed with the `oy_clean()` function.
-
-# Cleaning the data
-
-Having read the Oyster data files, you can clean up the formatting and engineer new features with `oy_read()`.
+You can clean up the formatting and engineer new features with `oy_clean()`.
 
 ```{r oy_clean}
 # Clean the output from oy_read()
 data_clean <- oy_clean(data_raw)
 
-# Print the first few rows
+# See the data frame structure
 str(data_clean) 
 ```
+
+So what did oy_clean() do? You can see that we now have 13 variables rather than 8. This is because we had created:
+
+* date-times for start and end (takes into account journeys that start before midnight and end after)
+* day of the week
+* journey duration
+* the mode of travel (train, bus, etc)
+* the start and end stations for train travel
+* the number of the bus route

@@ -73,7 +73,7 @@
       <h1>Introduction to {oystr}</h1>
                         <h4 class="author">Matt Dray</h4>
             
-            <h4 class="date">2019-09-25</h4>
+            <h4 class="date">2019-09-30</h4>
       
       
       <div class="hidden name"><code>oystr-intro.Rmd</code></div>
@@ -82,6 +82,16 @@
 
     
     
+<div id="tldr" class="section level1">
+<h1 class="hasAnchor">
+<a href="#tldr" class="anchor"></a>tl;dr</h1>
+<p>You can use the {oystr} package to process Oyster journey data in CSVs provided by Transport for London (TfL).</p>
+<p>Provide a file path to oy_read() that contains the CSVs, then use data_clean() to process the data and extract new features.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"matt-dray/oystr"</span>)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(oystr)</a>
+<a class="sourceLine" id="cb1-3" title="3">data_raw &lt;-<span class="st"> </span><span class="kw"><a href="../reference/oy_read.html">oy_read</a></span>(<span class="dt">path =</span> <span class="st">"path/to/data"</span>)</a>
+<a class="sourceLine" id="cb1-4" title="4">data_clean &lt;-<span class="st"> </span><span class="kw"><a href="../reference/oy_clean.html">oy_clean</a></span>(<span class="dt">x =</span> data_raw)</a></code></pre></div>
+</div>
 <div id="background" class="section level1">
 <h1 class="hasAnchor">
 <a href="#background" class="anchor"></a>Background</h1>
@@ -94,98 +104,120 @@
 <h1 class="hasAnchor">
 <a href="#oyster-data" class="anchor"></a>Oyster data</h1>
 <p>The CSV file is in the same format each time your receive or download it.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># Read an anonymised CSV example</span></a>
-<a class="sourceLine" id="cb1-2" title="2">example_raw &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.csv</a></span>(<span class="st">"../inst/extdata/july.csv"</span>)</a>
-<a class="sourceLine" id="cb1-3" title="3"></a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="co"># Print the first few rows</span></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(example_raw)</a>
-<a class="sourceLine" id="cb1-6" title="6"><span class="co">#&gt;             X        X.1      X.2                    X.3    X.4    X.5</span></a>
-<a class="sourceLine" id="cb1-7" title="7"><span class="co">#&gt; 1        Date Start Time End Time         Journey/Action Charge Credit</span></a>
-<a class="sourceLine" id="cb1-8" title="8"><span class="co">#&gt; 2 31-Jul-2018      16:11    16:50 Station A to Station B      0   &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb1-9" title="9"><span class="co">#&gt; 3 31-Jul-2018      06:47    07:34 Station B to Station A      0   &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb1-10" title="10"><span class="co">#&gt; 4 28-Jul-2018      18:57    19:44 Station C to Station R      0   &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb1-11" title="11"><span class="co">#&gt; 5 28-Jul-2018      13:49    14:43 Station R to Station L      0   &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb1-12" title="12"><span class="co">#&gt; 6 26-Jul-2018      17:51    19:18 Station D to Station R      0   &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb1-13" title="13"><span class="co">#&gt;       X.6  X.7</span></a>
-<a class="sourceLine" id="cb1-14" title="14"><span class="co">#&gt; 1 Balance Note</span></a>
-<a class="sourceLine" id="cb1-15" title="15"><span class="co">#&gt; 2       8 &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb1-16" title="16"><span class="co">#&gt; 3       8 &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb1-17" title="17"><span class="co">#&gt; 4       8 &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb1-18" title="18"><span class="co">#&gt; 5       8 &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb1-19" title="19"><span class="co">#&gt; 6       8 &lt;NA&gt;</span></a></code></pre></div>
-<p>You can immediately start to see some problems. For example:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># Read an anonymised CSV example</span></a>
+<a class="sourceLine" id="cb2-2" title="2">example_raw &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.csv</a></span>(<span class="st">"../inst/extdata/july.csv"</span>)</a>
+<a class="sourceLine" id="cb2-3" title="3"></a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="co"># Print the first few rows</span></a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(example_raw)</a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="co">#&gt;             X        X.1      X.2                    X.3    X.4    X.5</span></a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt; 1        Date Start Time End Time         Journey/Action Charge Credit</span></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt; 2 31-Jul-2018      16:11    16:50 Station A to Station B      0   &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt; 3 31-Jul-2018      06:47    07:34 Station B to Station A      0   &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb2-10" title="10"><span class="co">#&gt; 4 28-Jul-2018      18:57    19:44 Station C to Station R      0   &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb2-11" title="11"><span class="co">#&gt; 5 28-Jul-2018      13:49    14:43 Station R to Station L      0   &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb2-12" title="12"><span class="co">#&gt; 6 26-Jul-2018      17:51    19:18 Station D to Station R      0   &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb2-13" title="13"><span class="co">#&gt;       X.6  X.7</span></a>
+<a class="sourceLine" id="cb2-14" title="14"><span class="co">#&gt; 1 Balance Note</span></a>
+<a class="sourceLine" id="cb2-15" title="15"><span class="co">#&gt; 2       8 &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb2-16" title="16"><span class="co">#&gt; 3       8 &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb2-17" title="17"><span class="co">#&gt; 4       8 &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb2-18" title="18"><span class="co">#&gt; 5       8 &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb2-19" title="19"><span class="co">#&gt; 6       8 &lt;NA&gt;</span></a></code></pre></div>
+<p>The resulting data frame has some problems. For example:</p>
 <ul>
-<li>the headers are in the first row because the first row of the CSV is blank</li>
-<li>the date is recorded for the journey start, but the journey end could feasibly be a different day</li>
-<li>Journey/Action contains multiple types of information, such as start and end stations</li>
+<li>the first row of the CSV is blank, so the column headers end up as the first row of data in the data frame</li>
+<li>the date is recorded for the journey start only, even thtough the journey end could be the next day</li>
+<li>Journey/Action contains multiple types of information, like the start station, end station and bus journeys</li>
 </ul>
-<p>The {oystr} package was written to help address these kinds of problems.</p>
+<p>The aim of the {oystr} package is to help address these types of issues.</p>
 </div>
 <div id="reading-the-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#reading-the-data" class="anchor"></a>Reading the data</h1>
-<p>The <code><a href="../reference/oy_read.html">oy_read()</a></code> function reads and combines CSV files of Oyster data that are in the expected format provided by TfL. The function takes one argument: a string that is the path to a folder containing your Oyster data files.</p>
-<p>For example, the following file path contains some CSV files and some non-CSV files. Two of the CSVs are in the format supplied by TfL and one is not.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># File path to a folder containing oystr data </span></a>
-<a class="sourceLine" id="cb2-2" title="2">filepath &lt;-<span class="st"> "../inst/extdata/"</span></a>
-<a class="sourceLine" id="cb2-3" title="3"></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="co"># Print the file names at that path</span></a>
-<a class="sourceLine" id="cb2-5" title="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list.files">list.files</a></span>(filepath)</a>
-<a class="sourceLine" id="cb2-6" title="6"><span class="co">#&gt; [1] "august.csv"     "july.csv"       "not_oyster.csv" "not_oyster.txt"</span></a></code></pre></div>
-<p>In this example, <code>july.csv</code> and <code>august.csv</code> are legitimate files of Oyster data in TfL format. The other files aren’t. So how to read the correct files and bind them together? First load the {oystr} package.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># Uncomment and run this line to install if not already</span></a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="co"># remotes::install_github("matt-dray/oystr")</span></a>
-<a class="sourceLine" id="cb3-3" title="3"></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="co"># Load the package</span></a>
-<a class="sourceLine" id="cb3-5" title="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(oystr)</a></code></pre></div>
-<p>Then you can use the <code><a href="../reference/oy_read.html">oy_read()</a></code> function. Pass it a file path to a folder containing your files.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co"># Read data from a folder</span></a>
-<a class="sourceLine" id="cb4-2" title="2">data_raw &lt;-<span class="st"> </span><span class="kw"><a href="../reference/oy_read.html">oy_read</a></span>(filepath)</a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt; Warning in oy_read(filepath): 1 CSV file wasn't in the expected format and</span></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt; was discarded</span></a></code></pre></div>
+<p>The <code><a href="../reference/oy_read.html">oy_read()</a></code> function reads and combines multiple CSV files of Oyster data. The function takes one argument: a string that is the path to a folder containing your Oyster data files.</p>
+<p>The names of the files don’t matter, but the structure must be in the format provided by TfL.</p>
+<p>For example, the file path in the following chunk has four files: two are CSVs containing monthly Oyster data in the format supplied by TfL (<code>july.csv</code> and <code>august.csv</code>) and the other two are a CSV and a text file that don’t contain Oyster data (<code>not_oyster.csv</code> and <code>not_oyster.txt</code>).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># File path to a folder containing oyster data</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="co"># Replace this path with your own</span></a>
+<a class="sourceLine" id="cb3-3" title="3">filepath &lt;-<span class="st"> "../inst/extdata/"</span></a>
+<a class="sourceLine" id="cb3-4" title="4"></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="co"># Print the file names at that path</span></a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list.files">list.files</a></span>(filepath)</a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt; [1] "august.csv"     "july.csv"       "not_oyster.csv" "not_oyster.txt"</span></a></code></pre></div>
+<p>So we need to read the two CSVs of Oyster data and ignore the others. The {oystr} package can help you. You can install it from GitHub and then load it.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co"># Install the {remotes} package to help install {oystr} </span></a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"remotes"</span>)</a>
+<a class="sourceLine" id="cb4-3" title="3">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"matt-dray/oystr"</span>)</a>
+<a class="sourceLine" id="cb4-4" title="4"></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co"># Load the package</span></a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(oystr)</a></code></pre></div>
+<p>The functions of the {oystr} package are now available to you.</p>
+<p>Use the <code><a href="../reference/oy_read.html">oy_read()</a></code> function to read the data sets. To the ‘path’ argument provide a file path to a folder containing your files. Here I’ve used the filepath created in teh sectio above.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># Read data from a folder</span></a>
+<a class="sourceLine" id="cb5-2" title="2">data_raw &lt;-<span class="st"> </span><span class="kw"><a href="../reference/oy_read.html">oy_read</a></span>(<span class="dt">path =</span> filepath)</a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="co">#&gt; Warning in oy_read(path = filepath): 1 CSV file wasn't in the expected</span></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="co">#&gt; format and was discarded</span></a></code></pre></div>
 <p>This gave a warning for one CSV file that was in the wrong format – the function identified that it didn’t contain Oyster data. The text file was ignored.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(data_raw)</a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="co">#&gt; 'data.frame':    102 obs. of  8 variables:</span></a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="co">#&gt;  $ Date          : chr  "31-Aug-2018" "31-Aug-2018" "28-Aug-2018" "28-Aug-2018" ...</span></a>
-<a class="sourceLine" id="cb5-4" title="4"><span class="co">#&gt;  $ Start.Time    : chr  "16:11" "06:47" "18:57" "13:49" ...</span></a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="co">#&gt;  $ End.Time      : chr  "16:50" "07:34" "19:44" "14:43" ...</span></a>
-<a class="sourceLine" id="cb5-6" title="6"><span class="co">#&gt;  $ Journey.Action: chr  "Station A to Station B" "Station B to Station A" "Station C to Station R" "Station R to Station L" ...</span></a>
-<a class="sourceLine" id="cb5-7" title="7"><span class="co">#&gt;  $ Charge        : chr  "0" "0" "0" "0" ...</span></a>
-<a class="sourceLine" id="cb5-8" title="8"><span class="co">#&gt;  $ Credit        : chr  "NA" "NA" "NA" "NA" ...</span></a>
-<a class="sourceLine" id="cb5-9" title="9"><span class="co">#&gt;  $ Balance       : num  8 8 8 8 8 8 8 8 8 8 ...</span></a>
-<a class="sourceLine" id="cb5-10" title="10"><span class="co">#&gt;  $ Note          : chr  "NA" "NA" "NA" "NA" ...</span></a></code></pre></div>
+<p>Let’s take a look at the structure of the data.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(data_raw)</a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="co">#&gt; 'data.frame':    102 obs. of  8 variables:</span></a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt;  $ Date          : chr  "31-Aug-2018" "31-Aug-2018" "28-Aug-2018" "28-Aug-2018" ...</span></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt;  $ Start.Time    : chr  "16:11" "06:47" "18:57" "13:49" ...</span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt;  $ End.Time      : chr  "16:50" "07:34" "19:44" "14:43" ...</span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt;  $ Journey.Action: chr  "Station A to Station B" "Station B to Station A" "Station C to Station R" "Station R to Station L" ...</span></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt;  $ Charge        : chr  "0" "0" "0" "0" ...</span></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt;  $ Credit        : chr  "NA" "NA" "NA" "NA" ...</span></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt;  $ Balance       : num  8 8 8 8 8 8 8 8 8 8 ...</span></a>
+<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt;  $ Note          : chr  "NA" "NA" "NA" "NA" ...</span></a></code></pre></div>
+<p>So we have</p>
+<p>The output data frame contains rows of data from both CSV files. We can tell because it has data from both months of the input data frames (July and August in this example).</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="co"># Count rows from each month of input data</span></a>
+<a class="sourceLine" id="cb7-2" title="2">july &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/grep">grepl</a></span>(<span class="st">"Jul"</span>, data_raw<span class="op">$</span>Date))</a>
+<a class="sourceLine" id="cb7-3" title="3">august &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/grep">grepl</a></span>(<span class="st">"Aug"</span>, data_raw<span class="op">$</span>Date))</a>
+<a class="sourceLine" id="cb7-4" title="4"></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="co"># Check their sum equals the output from oy_read()</span></a>
+<a class="sourceLine" id="cb7-6" title="6">july <span class="op">+</span><span class="st"> </span>august <span class="op">==</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(data_raw)</a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+</div>
+<div id="cleaning-the-data" class="section level1">
+<h1 class="hasAnchor">
+<a href="#cleaning-the-data" class="anchor"></a>Cleaning the data</h1>
 <p>There’s still a number of problems after the data is read in and the blank first row is removed. For example:</p>
 <ul>
 <li>dates and times are character types, not datettime</li>
 <li>charge and credit are also character types</li>
 <li>different types of data (bus trips and train journeys) are in the same <code>Journey.Action</code> column</li>
 </ul>
-<p>These can be fixed with the <code><a href="../reference/oy_clean.html">oy_clean()</a></code> function.</p>
-</div>
-<div id="cleaning-the-data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#cleaning-the-data" class="anchor"></a>Cleaning the data</h1>
-<p>Having read the Oyster data files, you can clean up the formatting and engineer new features with <code><a href="../reference/oy_read.html">oy_read()</a></code>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># Clean the output from oy_read()</span></a>
-<a class="sourceLine" id="cb6-2" title="2">data_clean &lt;-<span class="st"> </span><span class="kw"><a href="../reference/oy_clean.html">oy_clean</a></span>(data_raw)</a>
-<a class="sourceLine" id="cb6-3" title="3"></a>
-<a class="sourceLine" id="cb6-4" title="4"><span class="co"># Print the first few rows</span></a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(data_clean) </a>
-<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt; 'data.frame':    102 obs. of  13 variables:</span></a>
-<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt;  $ datetime_start  : POSIXct, format: "2018-08-31 16:11:00" "2018-08-31 06:47:00" ...</span></a>
-<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt;  $ datetime_end    : POSIXct, format: "2018-08-31 16:50:00" "2018-08-31 07:34:00" ...</span></a>
-<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt;  $ weekday_start   : chr  "Friday" "Friday" "Tuesday" "Tuesday" ...</span></a>
-<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt;  $ journey_duration: 'difftime' num  39 47 47 54 ...</span></a>
-<a class="sourceLine" id="cb6-11" title="11"><span class="co">#&gt;   ..- attr(*, "units")= chr "mins"</span></a>
-<a class="sourceLine" id="cb6-12" title="12"><span class="co">#&gt;  $ mode            : chr  "Train" "Train" "Train" "Train" ...</span></a>
-<a class="sourceLine" id="cb6-13" title="13"><span class="co">#&gt;  $ station_start   : chr  "Station A" "Station B" "Station C" "Station R" ...</span></a>
-<a class="sourceLine" id="cb6-14" title="14"><span class="co">#&gt;  $ station_end     : chr  "Station B" "Station A" "Station R" "Station L" ...</span></a>
-<a class="sourceLine" id="cb6-15" title="15"><span class="co">#&gt;  $ bus_route       : chr  NA NA NA NA ...</span></a>
-<a class="sourceLine" id="cb6-16" title="16"><span class="co">#&gt;  $ payment         : chr  NA NA NA NA ...</span></a>
-<a class="sourceLine" id="cb6-17" title="17"><span class="co">#&gt;  $ charge          : chr  "0" "0" "0" "0" ...</span></a>
-<a class="sourceLine" id="cb6-18" title="18"><span class="co">#&gt;  $ credit          : chr  "NA" "NA" "NA" "NA" ...</span></a>
-<a class="sourceLine" id="cb6-19" title="19"><span class="co">#&gt;  $ balance         : num  8 8 8 8 8 8 8 8 8 8 ...</span></a>
-<a class="sourceLine" id="cb6-20" title="20"><span class="co">#&gt;  $ note            : chr  "NA" "NA" "NA" "NA" ...</span></a></code></pre></div>
+<p>You can clean up the formatting and engineer new features with <code><a href="../reference/oy_clean.html">oy_clean()</a></code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="co"># Clean the output from oy_read()</span></a>
+<a class="sourceLine" id="cb8-2" title="2">data_clean &lt;-<span class="st"> </span><span class="kw"><a href="../reference/oy_clean.html">oy_clean</a></span>(data_raw)</a>
+<a class="sourceLine" id="cb8-3" title="3"></a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="co"># See the data frame structure</span></a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(data_clean) </a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="co">#&gt; 'data.frame':    102 obs. of  13 variables:</span></a>
+<a class="sourceLine" id="cb8-7" title="7"><span class="co">#&gt;  $ datetime_start  : POSIXct, format: "2018-08-31 16:11:00" "2018-08-31 06:47:00" ...</span></a>
+<a class="sourceLine" id="cb8-8" title="8"><span class="co">#&gt;  $ datetime_end    : POSIXct, format: "2018-08-31 16:50:00" "2018-08-31 07:34:00" ...</span></a>
+<a class="sourceLine" id="cb8-9" title="9"><span class="co">#&gt;  $ weekday_start   : chr  "Friday" "Friday" "Tuesday" "Tuesday" ...</span></a>
+<a class="sourceLine" id="cb8-10" title="10"><span class="co">#&gt;  $ journey_duration: 'difftime' num  39 47 47 54 ...</span></a>
+<a class="sourceLine" id="cb8-11" title="11"><span class="co">#&gt;   ..- attr(*, "units")= chr "mins"</span></a>
+<a class="sourceLine" id="cb8-12" title="12"><span class="co">#&gt;  $ mode            : chr  "Train" "Train" "Train" "Train" ...</span></a>
+<a class="sourceLine" id="cb8-13" title="13"><span class="co">#&gt;  $ station_start   : chr  "Station A" "Station B" "Station C" "Station R" ...</span></a>
+<a class="sourceLine" id="cb8-14" title="14"><span class="co">#&gt;  $ station_end     : chr  "Station B" "Station A" "Station R" "Station L" ...</span></a>
+<a class="sourceLine" id="cb8-15" title="15"><span class="co">#&gt;  $ bus_route       : chr  NA NA NA NA ...</span></a>
+<a class="sourceLine" id="cb8-16" title="16"><span class="co">#&gt;  $ payment         : chr  NA NA NA NA ...</span></a>
+<a class="sourceLine" id="cb8-17" title="17"><span class="co">#&gt;  $ charge          : chr  "0" "0" "0" "0" ...</span></a>
+<a class="sourceLine" id="cb8-18" title="18"><span class="co">#&gt;  $ credit          : chr  "NA" "NA" "NA" "NA" ...</span></a>
+<a class="sourceLine" id="cb8-19" title="19"><span class="co">#&gt;  $ balance         : num  8 8 8 8 8 8 8 8 8 8 ...</span></a>
+<a class="sourceLine" id="cb8-20" title="20"><span class="co">#&gt;  $ note            : chr  "NA" "NA" "NA" "NA" ...</span></a></code></pre></div>
+<p>So what did oy_clean() do? You can see that we now have 13 variables rather than 8. This is because we had created:</p>
+<ul>
+<li>date-times for start and end (takes into account journeys that start before midnight and end after)</li>
+<li>day of the week</li>
+<li>journey duration</li>
+<li>the mode of travel (train, bus, etc)</li>
+<li>the start and end stations for train travel</li>
+<li>the number of the bus route</li>
+</ul>
 </div>
   </div>
 
@@ -194,7 +226,8 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#background">Background</a></li>
+<li><a href="#tldr">tl;dr</a></li>
+      <li><a href="#background">Background</a></li>
       <li><a href="#oyster-data">Oyster data</a></li>
       <li><a href="#reading-the-data">Reading the data</a></li>
       <li><a href="#cleaning-the-data">Cleaning the data</a></li>
