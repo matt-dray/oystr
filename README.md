@@ -1,11 +1,11 @@
-<img src="https://raw.githubusercontent.com/matt-dray/stickers/master/output/oystr_hex.png" alt="Hexagonal sticker with an oystercatcher bird on it" width="150" align="right">
+<img src="https://raw.githubusercontent.com/matt-dray/stickers/master/output/oystr_hex.png" width="150" align="right">
 
 # oystr
 
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+<!-- badges: start -->[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Travis build status](https://travis-ci.org/matt-dray/oystr.svg?branch=master)](https://travis-ci.org/matt-dray/oystr)
 [![Coverage status](https://codecov.io/gh/matt-dray/oystr/branch/master/graph/badge.svg)](https://codecov.io/github/matt-dray/oystr?branch=master)
-[![](https://img.shields.io/github/languages/code-size/matt-dray/oystr.svg)](https://github.com/matt-dray/oystr)
+[![](https://img.shields.io/github/languages/code-size/matt-dray/oystr.svg)](https://github.com/matt-dray/oystr)<!-- badges: end -->
 
 ## Purpose
 
