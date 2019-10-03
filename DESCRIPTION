@@ -7,6 +7,8 @@ Description: You can opt-in to monthly emails from Transport for London (TfL) th
     unaffiliated with Transport for London (TfL).
 Authors@R: person("Matt", "Dray", email = "mwdray@gmail.com", role = c("aut", "cre"))
 License: MIT + file LICENSE
+URL: https://github.com/matt-dray/oystr/, https://matt-dray.github.io/oystr/
+BugReports: https://github.com/matt-dray/oystr/issues
 Encoding: UTF-8
 LazyData: true
 ByteCompile: true
