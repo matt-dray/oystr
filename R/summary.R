@@ -9,8 +9,8 @@ oy_summary <- function(data, mode = "Train") {
   # Isolate mode
   trains <- data[data$mode == mode, ]
 
-  # The generic data.frame summary
-  train_summary <- summary(trains)
+  # Total journeys by train
+  count_journeys <- nrow(trains)
 
   # Total journey duration
   duration_total <- sum(trains$journey_duration, na.rm = TRUE)
@@ -33,7 +33,7 @@ oy_summary <- function(data, mode = "Train") {
 
   # Make each summary item a list element
   summary_list <- list(
-    train_summary = train_summary,
+    count_journeys = count_journeys,
     stations_popular = stations_popular,
     stations_matrix = stations_matrix,
     duration_total = duration_total,
@@ -45,12 +45,18 @@ oy_summary <- function(data, mode = "Train") {
     # Isolate mode
     bus <- data[data$mode == mode, ]
 
-    # The generic data.frame summary
-    bus_summary <- summary(bus)
+    # Total journeys by train
+    count_journeys <- nrow(bus)
 
     # Most popular routes
     routes_popular <- as.data.frame(table(
-      c(trains$station_start,trains$station_end), useNA = "no"))
+      c(bus$station_start, bus$station_end), useNA = "no"))
+
+    # Make each summary item a list element
+    summary_list <- list(
+      count_journeys = count_journeys,
+      routes_popular = routes_popular
+    )
 
   }
 
