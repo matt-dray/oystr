@@ -14,7 +14,7 @@ A data.frame object.
 }
 \description{
 Read one or more Oyster journey history files from a single folder
-    and combine them. Assumes journey histories are raw CSV files as received
-    by email from Transport for London. Ignores files that are not identified
-    as Oyster history journey files.
+and combine them. Assumes journey histories are raw CSV files as received
+by email from Transport for London. Ignores files that are not identified
+as Oyster history journey files.
 }
