@@ -1,9 +1,10 @@
 #' Read Oyster journey history files
 #'
-#' @description Read one or more Oyster journey history files from a single folder
-#'     and combine them. Assumes journey histories are raw CSV files as received
-#'     by email from Transport for London. Ignores files that are not identified
-#'     as Oyster history journey files.
+#' Read one or more Oyster journey history files from a single folder
+#' and combine them. Assumes journey histories are raw CSV files as received
+#' by email from Transport for London. Ignores files that are not identified
+#' as Oyster history journey files.
+#'
 #' @param path A string describing a filepath to a folder of CSVs
 #' @return A data.frame object.
 #' @export
@@ -76,9 +77,10 @@ oy_read <- function(path) {
 
 #' Clean Oyster journey history data
 #'
-#' @description Process a data.frame object containing Oyster journey history
-#'     data. Could be a raw file as received by email from Transport for London
-#'     or the output from oy_read().
+#' Process a data.frame object containing Oyster journey history data. Could be
+#' a raw file as received by email from Transport for London or the output from
+#' oy_read().
+#'
 #' @param x A data.frame object containing Oyster history journey.
 #' @return A data.frame object.
 #' @export
@@ -131,9 +133,25 @@ oy_clean <- function(x) {
     units = "mins", tz = "GMT"
   )
 
-  # Date: day of the week
+  # Date: day of the week (ordered factor)
   x$weekday_start <- weekdays(x$date_start)
   x$weekday_end <- weekdays(x$date_end)
+  x$weekday_start <- factor(
+    journeys_clean$weekday_start,
+    levels = c(
+      "Monday", "Tuesday", "Wednesday", "Thursday",
+      "Friday", "Saturday", "Sunday"
+    ),
+    ordered = TRUE
+  )
+  x$weekday_end <- factor(
+    journeys_clean$weekday_start,
+    levels = c(
+      "Monday", "Tuesday", "Wednesday", "Thursday",
+      "Friday", "Saturday", "Sunday"
+    ),
+    ordered = TRUE
+  )
 
   # Pay: extract mode of transport
   # TODO: rewrite with if(){}?
@@ -163,6 +181,8 @@ oy_clean <- function(x) {
   # TODO: if it doesn't have 'to', then it should get an NA for station_start, rather than being filled
   x$station_start <- sapply(strsplit(as.character(x$journey_action), " to "), "[", 1)
   x$station_end <- sapply(strsplit(as.character(x$journey_action), " to "), "[", 2)
+  x$station_start <- ifelse(x$mode != "Train", NA, x$station_start)
+  x$station_end <- ifelse(x$mode != "Train", NA, x$station_start)
 
   # Bus: extract route
   x$bus_route <- ifelse(
@@ -179,6 +199,7 @@ oy_clean <- function(x) {
     "note"
   )]
 
+  # Return the object
   return(x)
 
 }
