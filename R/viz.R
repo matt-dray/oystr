@@ -112,3 +112,54 @@ oy_cols <- function(...) {
   # negative indices
 
 }
+
+#' Simple Time Series Line Plots of TfL Journey Data
+#'
+#' @description Plot journey information over time.
+#' @param data Data frame output from \code{oy_clean()}.
+#' @param x_var The name of the variable from \code{data} that you want on the x axis
+#' @param y_var The name of the continuous variable frm \code{data} for the y
+#'     axis. Choose \code{"journey_duration"} or \code{"balance"}.
+#' @param weekdays Logical. Restrict the output to Monday to Friday with
+#'     \code{True}
+#' @param mode Currently restricted to "Train".
+#' @return A data.frame object.
+#' @export
+
+oy_lineplot <- function(
+  data,
+  x_var = "datetime_start",
+  y_var = "journey_duration",
+  weekdays = FALSE,
+  mode = "Train"
+) {
+
+  # Wrangle
+  df <- data[data$mode == mode, c(x_var, y_var)]  # train only
+  df <- df[complete.cases(df), ]  # no rows with NA in x or y
+
+  if (weekdays == TRUE) {
+    df[df$weekday_start %in% c("Saturday, Sunday"), ] <- NA_character_
+  }
+
+  # Plot
+  plot(
+    x = df[, x_var],
+    y = df[, y_var],
+    type = "l",
+    las = 1,
+    xlab = "Date-time start",
+    ylab = ifelse(y_var == "journey_duration", "Duration (minutes)",
+                  ifelse(y_var == "credit", "Credit (£)",
+                         ifelse(y_var == "balance", "Balance (£)", "ERROR"
+                         )
+                  )
+    )
+  )
+
+  mytitle = paste(mode, "journeys")
+  mysubtitle = ifelse(weekdays == TRUE, "Weekdays only", "All days of the week")
+  mtext(side = 3, line = 2, adj = 0, cex = 1.2, mytitle)
+  mtext(side = 3, line = 1, adj = 0, cex = 1, mysubtitle)
+
+}

@@ -13,7 +13,7 @@ oy_clean(x)
 A data.frame object.
 }
 \description{
-Process a data.frame object containing Oyster journey history
-    data. Could be a raw file as received by email from Transport for London
-    or the output from oy_read().
+Process a data.frame object containing Oyster journey history data. Could be
+a raw file as received by email from Transport for London or the output from
+oy_read().
 }

@@ -12,7 +12,7 @@ BugReports: https://github.com/matt-dray/oystr/issues
 Encoding: UTF-8
 LazyData: true
 ByteCompile: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.1
 Depends: R (>= 2.10)
 Suggests: 
     testthat,

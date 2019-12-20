@@ -5,3 +5,4 @@
 ^\.travis\.yml$
 ^oystr\.Rproj$
 ^\.Rproj\.user$
+^data-raw$
