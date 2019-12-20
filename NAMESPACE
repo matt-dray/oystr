@@ -2,4 +2,5 @@
 
 export(oy_clean)
 export(oy_cols)
+export(oy_plot)
 export(oy_read)
