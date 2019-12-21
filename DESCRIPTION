@@ -3,8 +3,8 @@ Version: 0.0.0.9000
 Title: Handle Personal Oyster Journey History Data Provided by Transport for London
 Description: You can opt-in to monthly emails from Transport for London (TfL) that
     have your Oyster journey history attached as a CSV. Functions in this small
-    package help you read, wrangle and plot these data. I, and this work, are
-    unaffiliated with Transport for London (TfL).
+    package help you read, wrangle and summarise these data. I, and this work,
+    are unaffiliated with Transport for London (TfL).
 Authors@R: person("Matt", "Dray", email = "mwdray@gmail.com", role = c("aut", "cre"))
 License: MIT + file LICENSE
 URL: https://github.com/matt-dray/oystr/, https://matt-dray.github.io/oystr/
@@ -12,11 +12,11 @@ BugReports: https://github.com/matt-dray/oystr/issues
 Encoding: UTF-8
 LazyData: true
 ByteCompile: true
-RoxygenNote: 7.0.1
+RoxygenNote: 7.0.2
 Depends: R (>= 2.10)
 Suggests: 
-    testthat,
     covr,
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 VignetteBuilder: knitr
