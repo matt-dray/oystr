@@ -10,17 +10,11 @@ test_that("valid character input vector returns vector", {
   expect_identical(class(oy_cols("line_circle", "line_victoria")), "character")
 })
 
-# test_that("valid mixed input vector returns vector", {
-#   # TODO: mixed input (numeric and character) should yield result
-#   # expect_identical(class(oy_cols("1", "line_victoria")), "character")
-# })
-
 test_that("non-vector input returns error", {
   test_list <- list(x = 1:3, y = 1:3)
   test_df <- data.frame(x = 1:3, y = 1:3)
   expect_error(oy_cols(test_list))
   expect_error(oy_cols(test_df))
-  # TODO: multidimensional arrays and matrices should fail
 })
 
 test_that("invalid indices fail", {

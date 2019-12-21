@@ -1,8 +1,7 @@
 context("test-clean")
 
 test_that("valid input returns a data.frame", {
-  data <- oy_read("../testdata/valid")
-  expect_identical(class(oy_clean(data)), "data.frame")
+  expect_identical(class(oy_clean(journeys_read)), "data.frame")
 })
 
 test_that("invalid input causes an error", {

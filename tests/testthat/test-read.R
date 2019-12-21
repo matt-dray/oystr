@@ -1,16 +1,13 @@
 context("test-read")
 
-test_that("an invalid path results in an error", {
+test_that("an invalid input path results in an error", {
   expect_error(oy_read(1234))
   expect_error(oy_read("not a valid filepath"))
   expect_error(oy_read(bare_string))
+  expect_error(oy_read(FALSE))
 })
 
-test_that("an empty folder results in a error", {
-  expect_error(oy_read("../testdata/empty"))
-})
-
-test_that("an invalid CSV results in a warning", {
+test_that("reading from a folder with an invalid CSV results in a warning", {
   expect_warning(oy_read("../testdata/invalid"))
 })
 
