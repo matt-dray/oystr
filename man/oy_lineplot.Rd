@@ -2,7 +2,7 @@
 % Please edit documentation in R/viz.R
 \name{oy_lineplot}
 \alias{oy_lineplot}
-\title{Simple Time Series Line Plots of TfL Journey Data}
+\title{Line Plots of Oyster Journey Data}
 \usage{
 oy_lineplot(
   data,
@@ -29,5 +29,5 @@ axis. Choose \code{"journey_duration"} or \code{"balance"}.}
 A data.frame object.
 }
 \description{
-Plot journey information over time.
+Outputs a simple time series line plots of Oyster journey data.
 }

@@ -7,7 +7,7 @@
 oy_clean(x)
 }
 \arguments{
-\item{x}{A data.frame object containing Oyster history journey.}
+\item{x}{A data.frame object containing Oyster journey history.}
 }
 \value{
 A data.frame object.
