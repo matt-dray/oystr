@@ -116,6 +116,9 @@ oy_cols <- function(...) {
 #' @param weekdays Logical. Restrict the output to Monday to Friday with
 #'     \code{True}
 #' @param mode Currently restricted to "Train".
+#' @importFrom graphics mtext
+#' @importFrom graphics plot
+#' @importFrom stats complete.cases
 #' @return A data.frame object.
 #' @export
 
