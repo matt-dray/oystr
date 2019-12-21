@@ -81,7 +81,7 @@ oy_read <- function(path) {
 #' a raw file as received by email from Transport for London or the output from
 #' oy_read().
 #'
-#' @param x A data.frame object containing Oyster history journey.
+#' @param x A data.frame object containing Oyster journey history.
 #' @return A data.frame object.
 #' @export
 
@@ -137,7 +137,7 @@ oy_clean <- function(x) {
   x$weekday_start <- weekdays(x$date_start)
   x$weekday_end <- weekdays(x$date_end)
   x$weekday_start <- factor(
-    journeys_clean$weekday_start,
+    x$weekday_start,
     levels = c(
       "Monday", "Tuesday", "Wednesday", "Thursday",
       "Friday", "Saturday", "Sunday"
@@ -145,7 +145,7 @@ oy_clean <- function(x) {
     ordered = TRUE
   )
   x$weekday_end <- factor(
-    journeys_clean$weekday_start,
+    x$weekday_start,
     levels = c(
       "Monday", "Tuesday", "Wednesday", "Thursday",
       "Friday", "Saturday", "Sunday"

@@ -104,18 +104,11 @@ oy_cols <- function(...) {
     return(oyster_colours[cols])
   }
 
-
-  # if mixed (indices/names/NA)
-  # return what you can -  (1, 2, NA, 100) should return 1 and 2
-  # 'did you mean?'
-  # passing dataframes, matrices, arrays, lists
-  # negative indices
-
 }
 
-#' Simple Time Series Line Plots of TfL Journey Data
+#' Line Plots of Oyster Journey Data
 #'
-#' @description Plot journey information over time.
+#' @description Outputs a simple time series line plots of Oyster journey data.
 #' @param data Data frame output from \code{oy_clean()}.
 #' @param x_var The name of the variable from \code{data} that you want on the x axis
 #' @param y_var The name of the continuous variable frm \code{data} for the y
@@ -133,6 +126,41 @@ oy_lineplot <- function(
   weekdays = FALSE,
   mode = "Train"
 ) {
+
+  # Stop if data not a data.frame
+  if(!class(data) %in% c("data.frame", "tbl_df", "tbl")) {
+    stop(
+      "The data object should be of class 'data.frame'. You provided an object of class '", class(data), "'."
+    )
+  }
+
+  # Stop if bad x_var (only tone options for now)
+  if(x_var != "datetime_start") {
+    stop(
+      "For now, the x_var argument must be 'datetime_start'. You provided '", y_var, "'."
+    )
+  }
+
+  # Stop if bad y_var (only two options for now)
+  if(!y_var %in% c("journey_duration", "balance")) {
+    stop(
+      "For now, the y_var argument must be 'journey_duration' or 'balance'. You provided '", y_var, "'."
+    )
+  }
+
+  # Stop if bad weekdays
+  if(!weekdays %in% c(TRUE, FALSE)) {
+    stop(
+      "The weekdays argument must be TRUE or FALSE. You provided '", y_var, "'."
+    )
+  }
+
+  # Stop if bad mode (only train for now)
+  if(mode != "Train") {
+    stop(
+      "For now, the mode argument must be 'Train'. You provided '", mode, "'."
+    )
+  }
 
   # Wrangle
   df <- data[data$mode == mode, c(x_var, y_var)]  # train only
