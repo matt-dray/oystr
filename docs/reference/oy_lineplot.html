@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • oystr</title>
+<title>Line Plot of Oyster Journey Data — oy_lineplot • oystr</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,7 +42,9 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Line Plot of Oyster Journey Data — oy_lineplot" />
+<meta property="og:description" content="Outputs a simple time series line plot of Oyster journey data that's been
+cleaned with oy_clean." />
 <meta property="og:image" content="http://matt-dray.github.io/oystr/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -63,7 +65,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -122,78 +124,75 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Line Plot of Oyster Journey Data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/matt-dray/oystr/blob/master/R/viz.R'><code>R/viz.R</code></a></small>
+    <div class="hidden name"><code>oy_lineplot.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Outputs a simple time series line plot of Oyster journey data that's been
+cleaned with <code><a href='oy_clean.html'>oy_clean</a></code>.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>oy_lineplot</span>(
+  <span class='no'>data</span>,
+  <span class='kw'>x_var</span> <span class='kw'>=</span> <span class='st'>"datetime_start"</span>,
+  <span class='kw'>y_var</span> <span class='kw'>=</span> <span class='st'>"journey_duration"</span>,
+  <span class='kw'>weekdays</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"Train"</span>
+)</pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="journeys_clean.html">journeys_clean</a></code> </p>
-        </td>
-        <td><p>Example Oyster Journey History File (Cleaned)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="journeys_read.html">journeys_read</a></code> </p>
-        </td>
-        <td><p>Example Oyster Journey History File (Read In)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="oy_clean.html">oy_clean()</a></code> </p>
-        </td>
-        <td><p>Clean Oyster journey history data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="oy_cols.html">oy_cols()</a></code> </p>
-        </td>
-        <td><p>Transport for London Colours</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="oy_lineplot.html">oy_lineplot()</a></code> </p>
-        </td>
-        <td><p>Line Plot of Oyster Journey Data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="oy_read.html">oy_read()</a></code> </p>
-        </td>
-        <td><p>Read Oyster Journey History Files</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="oy_summary.html">oy_summary()</a></code> </p>
-        </td>
-        <td><p>Simple Summary Statistics of Oyster Journeys</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>data</th>
+      <td><p><code>data.frame</code> of Oyster journey history data cleaned using
+<code><a href='oy_clean.html'>oy_clean()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>x_var</th>
+      <td><p>The name of the variable from <code>data</code> that you want on the x
+axis. This is restricted currently to <code>datetime_start</code> and
+<code>"datetime_end"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>y_var</th>
+      <td><p>The name of the continuous variable from <code>data</code> for the y
+axis. Choose <code>"journey_duration"</code> or <code>"balance"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>weekdays</th>
+      <td><p>Logical. <code>FALSE</code> returns data for all days of the week.
+Restrict the output to Monday to Friday with <code>TRUE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>mode</th>
+      <td><p>Currently restricted to <code>"Train"</code>.</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A plot.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='no'>my_df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='oy_read.html'>oy_read</a></span>(<span class='st'>"path/to/folder/"</span>)
+<span class='no'>my_df_clean</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='oy_clean.html'>oy_clean</a></span>(<span class='no'>my_df</span>)
+<span class='fu'>oy_lineplot</span>(<span class='no'>my_df_clean</span>, <span class='kw'>y_var</span> <span class='kw'>=</span> <span class='st'>"Balance"</span>, <span class='kw'>weekdays</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+}</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
+
   </div>
 </div>
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://matt-dray.github.io/oystr/index.html</loc>
+  </url>
+  <url>
+    <loc>http://matt-dray.github.io/oystr/reference/journeys_clean.html</loc>
+  </url>
+  <url>
+    <loc>http://matt-dray.github.io/oystr/reference/journeys_read.html</loc>
+  </url>
+  <url>
+    <loc>http://matt-dray.github.io/oystr/reference/oy_clean.html</loc>
+  </url>
+  <url>
+    <loc>http://matt-dray.github.io/oystr/reference/oy_cols.html</loc>
+  </url>
+  <url>
+    <loc>http://matt-dray.github.io/oystr/reference/oy_lineplot.html</loc>
+  </url>
+  <url>
+    <loc>http://matt-dray.github.io/oystr/reference/oy_read.html</loc>
+  </url>
+  <url>
+    <loc>http://matt-dray.github.io/oystr/reference/oy_summary.html</loc>
+  </url>
+  <url>
+    <loc>http://matt-dray.github.io/oystr/articles/oystr-intro.html</loc>
+  </url>
+</urlset>

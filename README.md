@@ -3,10 +3,12 @@
 # oystr
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/oystr)](https://CRAN.R-project.org/package=oystr)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Travis build status](https://travis-ci.org/matt-dray/oystr.svg?branch=master)](https://travis-ci.org/matt-dray/oystr)
 [![Coverage status](https://codecov.io/gh/matt-dray/oystr/branch/master/graph/badge.svg)](https://codecov.io/github/matt-dray/oystr?branch=master)
-[![](https://img.shields.io/github/languages/code-size/matt-dray/oystr.svg)](https://github.com/matt-dray/oystr)<!-- badges: end -->
+[![](https://img.shields.io/github/languages/code-size/matt-dray/oystr.svg)](https://github.com/matt-dray/oystr)
+<!-- badges: end -->
 
 ## Purpose
 
@@ -43,7 +45,7 @@ Developing this package is an exercise in working with minimal dependencies (hop
 
 ## Limitations
 
-The format of these data have remained pretty consistent for a number of years and there's no reason to believe that it will change anytime soon. It could though. In which case, these functions may fail.
+The format of journey history data from TfL have remained pretty consistent for a number of years and there's no reason to believe that this will change anytime soon. It could though. In which case, these functions may fail.
 
 Also, I asked TfL for details of all the possible forms of their column 'Journey/Action', which includes things like station start and end, bus route and much more. They were unable to provide this information. Therefore, the `oy_clean()` function can only parse formats that I'm personally aware of (train and bus, mostly) given my own Oyster history data. For example, I know the exact string for bus journeys is "Bus journey, route <number>". I don't know what format this string takes if you travel on a boat, for example.
 

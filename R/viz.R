@@ -147,8 +147,8 @@ oy_lineplot <- function(
     )
   } else if (!y_var %in% c("journey_duration", "balance")) {
     stop(
-      "For now, the y_var argument must be 'journey_duration' or 'balance'\n.
-      You provided '", y_var, "'."
+      "For now, the y_var argument must be 'journey_duration' or 'balance'.\n",
+      "You provided '", y_var, "'."
     )
   } else if (!weekdays %in% c(TRUE, FALSE)) {
     stop(

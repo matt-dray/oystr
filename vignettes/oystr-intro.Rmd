@@ -106,8 +106,6 @@ Let's take a look at the structure of the data.
 str(data_raw)
 ```
 
-So we have 
-
 The output data frame contains rows of data from both CSV files. We can tell because it has data from both months of the input data frames (July and August in this example).
 
 ```{r july-august}
