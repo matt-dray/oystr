@@ -7,36 +7,42 @@
 oy_cols(...)
 }
 \arguments{
-\item{...}{Provide either the names or indices of colours in the vector (see details).}
+\item{...}{Provide either the names or indices of colours in the vector (see
+details).}
 }
 \value{
 A named vector object.
 }
 \description{
 A named vector of hexadecimal colour values from Transport for London's
-    \href{http://content.tfl.gov.uk/tfl-colour-standards-issue04.pdf}{colour standard}.
-    Includes corporate, mode-specific and safety colours, as well as London
-    Underground line colours.
+\href{http://content.tfl.gov.uk/tfl-colour-standards-issue04.pdf}{colour
+standard}. Includes corporate, mode-specific and safety colours, as well as
+London Underground line colours.
 }
 \details{
-An empty call returns the whole vector. The colour names are as follows:
+An empty call returns the whole vector. The colour names are as
+    follows:
    \itemize{
-       \item corporate: corporate_blue, corporate_red, corporate_grey, corporate_dark_grey,
-           corporate_yellow, corporate_green, corporate_black, corporate_white
-       \item mode-specific: transport_for_london, line_elizabeth, london_overground,
-           emirates_air_line, santander_cycles, london_river_services, london_underground,
-           london_buses, london_dial_a_ride, taxi_private_hire, visitor_centre,
+       \item corporate: corporate_blue, corporate_red, corporate_grey,
+           corporate_dark_grey, corporate_yellow, corporate_green,
+           corporate_black, corporate_white
+       \item mode-specific: transport_for_london, line_elizabeth,
+           london_overground, emirates_air_line, santander_cycles,
+           london_river_services, london_underground, london_buses,
+           london_dial_a_ride, taxi_private_hire, visitor_centre,
            london_coaches, docklands_light_railway, tfl_rail
-       \item safety: safety_blue, corporate_red, corporate_yellow, corporate_green
-   \item London Underground lines: line_bakerloo, line_hammersmith_city, line_piccadilly, line_central,
-       line_jubilee, line_victoria, line_circle, line_metropolitan, line_waterloo_city,
-       line_district, line_northern
-   \item other logos and identities: oyster_blue, oyster_cyan, legible_london_blue,
-       legible_london_yellow
+       \item safety: safety_blue, corporate_red, corporate_yellow,
+           corporate_green
+   \item London Underground lines: line_bakerloo, line_hammersmith_city,
+       line_piccadilly, line_central, line_jubilee, line_victoria,
+       line_circle, line_metropolitan, line_waterloo_city, line_district,
+       line_northern
+   \item other logos and identities: oyster_blue, oyster_cyan,
+       legible_london_blue, legible_london_yellow
    }
 }
 \examples{
-oy_cols()  # prints the vector
-oy_cols("oyster_blue", "oyster_cyan")  # prints
-oy_cols(1:5)  # provide indices
+oy_cols()  # return full named vector
+oy_cols("oyster_blue", "oyster_cyan")  # return named values
+oy_cols(1:5)  # return first five elements
 }

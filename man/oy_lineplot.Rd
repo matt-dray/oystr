@@ -2,7 +2,7 @@
 % Please edit documentation in R/viz.R
 \name{oy_lineplot}
 \alias{oy_lineplot}
-\title{Line Plots of Oyster Journey Data}
+\title{Line Plot of Oyster Journey Data}
 \usage{
 oy_lineplot(
   data,
@@ -13,21 +13,32 @@ oy_lineplot(
 )
 }
 \arguments{
-\item{data}{Data frame output from \code{oy_clean()}.}
+\item{data}{\code{data.frame} of Oyster journey history data cleaned using
+\code{\link{oy_clean()}}.}
 
-\item{x_var}{The name of the variable from \code{data} that you want on the x axis}
+\item{x_var}{The name of the variable from \code{data} that you want on the x
+axis. This is restricted currently to \code{datetime_start} and
+\code{"datetime_end"}.}
 
-\item{y_var}{The name of the continuous variable frm \code{data} for the y
+\item{y_var}{The name of the continuous variable from \code{data} for the y
 axis. Choose \code{"journey_duration"} or \code{"balance"}.}
 
-\item{weekdays}{Logical. Restrict the output to Monday to Friday with
-\code{True}}
+\item{weekdays}{Logical. \code{FALSE} returns data for all days of the week.
+Restrict the output to Monday to Friday with \code{TRUE}.}
 
-\item{mode}{Currently restricted to "Train".}
+\item{mode}{Currently restricted to \code{"Train"}.}
 }
 \value{
-A data.frame object.
+A plot.
 }
 \description{
-Outputs a simple time series line plots of Oyster journey data.
+Outputs a simple time series line plot of Oyster journey data that's been
+cleaned with \code{\link{oy_clean}}.
+}
+\examples{
+\dontrun{
+my_df <- oy_read("path/to/folder/")
+my_df_clean <- oy_clean(my_df)
+oy_lineplot(my_df_clean, y_var = "Balance", weekdays = FALSE)
+}
 }

@@ -10,10 +10,16 @@ oy_clean(x)
 \item{x}{A data.frame object containing Oyster journey history.}
 }
 \value{
-A data.frame object.
+A data.frame objectwith 13 columns and as many rows as journeys.
 }
 \description{
 Process a data.frame object containing Oyster journey history data. Could be
 a raw file as received by email from Transport for London or the output from
 oy_read().
+}
+\examples{
+\dontrun{
+my_df <- oy_read("path/to/folder/")
+my_df_clean <- oy_clean(my_df)
+}
 }

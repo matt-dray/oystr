@@ -1,13 +1,18 @@
-#' Read Oyster journey history files
+#' Read Oyster Journey History Files
 #'
 #' Read one or more Oyster journey history files from a single folder
 #' and combine them. Assumes journey histories are raw CSV files as received
 #' by email from Transport for London. Ignores files that are not identified
 #' as Oyster history journey files.
 #'
-#' @param path A string describing a filepath to a folder of CSVs
-#' @return A data.frame object.
+#' @param path A string describing a filepath to a folder of Oyster journey
+#'     history CSV files.
+#' @return A data.frame object with 8 columns and as many rows as journeys.
 #' @export
+#' @examples
+#' \dontrun{
+#' my_df <- oy_read("path/to/folder/")
+#' }
 
 oy_read <- function(path) {
 
@@ -42,6 +47,7 @@ oy_read <- function(path) {
     )
   )
 
+  # Name each list element with the file path name
   names(data_list_all) <- data_paths
 
   # Filter for elements with conditions of a TfL Oyster history statement
@@ -52,23 +58,30 @@ oy_read <- function(path) {
     "Balance", "Note"
   )
 
-  # Filter by list elements that match the expected column names
+  # Filter list by elements that match the expected column names
   data_list_subset <-
     Filter(f = function(x) { identical(names(x), match_cols) }, data_list_all)
 
   # Warning that elements were removed
   if (length(data_list_subset) < length(data_list_all)) {
+
+    # Count how many files were lost by filtering by expected column names
     count_removed <- length(data_list_all) - length(data_list_subset)
+
+    # Warnings based on the number of elements removed
     if(count_removed == 1) {
-      warning(paste(count_removed, "CSV file wasn't in the expected format and was discarded"))
+      warning(paste(count_removed, "CSV file wasn't in the expected format and was discarded."))
+    } else if (count_removed > 0) {
+      warning(paste(count_removed, "CSV files weren't in the expected format and were discarded."))
     } else {
-      warning(paste(count_removed, "CSV files weren't in the expected format and were discarded"))
+      stop("None of the CSVs were in the folder were in the expected format.")
     }
+
   }
 
   # Bind the rows from each list element (data frame)
   data_df <- do.call("rbind", data_list_subset)
-  rownames(data_df) <- c()
+  rownames(data_df) <- c()  # No rownames
 
   # Return the object
   return(data_df)
@@ -82,11 +95,17 @@ oy_read <- function(path) {
 #' oy_read().
 #'
 #' @param x A data.frame object containing Oyster journey history.
-#' @return A data.frame object.
+#' @return A data.frame objectwith 13 columns and as many rows as journeys.
 #' @export
+#' @examples
+#' \dontrun{
+#' my_df <- oy_read("path/to/folder/")
+#' my_df_clean <- oy_clean(my_df)
+#' }
 
 oy_clean <- function(x) {
 
+  # Stop for non-data.frame inputs
   if(class(x) != "data.frame") {
     stop(
     "\nYou must provide an object of class data.frame.\n",
@@ -94,9 +113,22 @@ oy_clean <- function(x) {
     )
   }
 
-  # TODO: additional stopping rules dependent on final shape/classes/column names
+  # Stop for non-Oyster-journey-history files
+  if(!names(x) %in% c("Date", "Start.Time", "End.Time", "Journey.Action",
+                      "Charge", "Credit", "Balance", "Note")) {
+    stop(
+      "The input data.frame doesn't look like an Oyster journey history file\n.",
+      "It should be an unaltered file received from Transport for London.\n",
+      "Try reading CSVs with the oy_read() function."
+      )
+  }
 
-  # Meta: make names lowercase and use underscore instead of period
+  # Stop for lack of content
+  if(nrow(x) == 0) {
+    stop("The input data.frame appears to be empty.")
+  }
+
+  # Meta: make column names lowercase and use underscore instead of period
   names(x) <- tolower(gsub("\\.", "_", names(x)))
 
   # Date: make date class
@@ -104,9 +136,12 @@ oy_clean <- function(x) {
   x$date_end <- x$date_start  # new column, date class
 
   # Datetime: create datetime
-  x$datetime_start <- as.POSIXct(paste(x$date, x$start_time),"%d-%b-%Y %H:%M", tz = "GMT")
-  x$datetime_end <- as.POSIXct(paste(x$date, x$end_time), "%d-%b-%Y %H:%M", tz = "GMT")
-
+  x$datetime_start <- as.POSIXct(
+    paste(x$date, x$start_time),"%d-%b-%Y %H:%M", tz = "GMT"
+  )
+  x$datetime_end <- as.POSIXct(
+    paste(x$date, x$end_time), "%d-%b-%Y %H:%M", tz = "GMT"
+  )
 
   # Date: increment end_date by +1 where journey finishes after midnight
   x$date_end <- as.Date(
@@ -136,25 +171,20 @@ oy_clean <- function(x) {
   # Date: day of the week (ordered factor)
   x$weekday_start <- weekdays(x$date_start)
   x$weekday_end <- weekdays(x$date_end)
+  days <- c("Monday", "Tuesday", "Wednesday", "Thursday",
+            "Friday", "Saturday", "Sunday")
   x$weekday_start <- factor(
     x$weekday_start,
-    levels = c(
-      "Monday", "Tuesday", "Wednesday", "Thursday",
-      "Friday", "Saturday", "Sunday"
-    ),
+    levels = days,
     ordered = TRUE
   )
   x$weekday_end <- factor(
     x$weekday_start,
-    levels = c(
-      "Monday", "Tuesday", "Wednesday", "Thursday",
-      "Friday", "Saturday", "Sunday"
-    ),
+    levels = days,
     ordered = TRUE
   )
 
   # Pay: extract mode of transport
-  # TODO: rewrite with if(){}?
   x$mode <- ifelse(
     test = grepl("Bus journey", x$journey_action),
     yes = "Bus",
@@ -166,7 +196,6 @@ oy_clean <- function(x) {
   )
 
   # Pay: extract type of payment
-  # TODO: rewrite with if(){}?
   x$payment <- ifelse(
     test = grepl("Season ticket", x$journey_action),
     yes = "Season ticket",
@@ -178,9 +207,14 @@ oy_clean <- function(x) {
   )
 
   # Train: split stations (in form 'x to y')
-  # TODO: if it doesn't have 'to', then it should get an NA for station_start, rather than being filled
-  x$station_start <- sapply(strsplit(as.character(x$journey_action), " to "), "[", 1)
-  x$station_end <- sapply(strsplit(as.character(x$journey_action), " to "), "[", 2)
+  # TODO: if it doesn't have 'to', then it should get an NA for station_start,
+  # rather than being filled
+  x$station_start <- sapply(
+    strsplit(as.character(x$journey_action), " to "), "[", 1
+  )
+  x$station_end <- sapply(
+    strsplit(as.character(x$journey_action), " to "), "[", 2
+  )
   x$station_start <- ifelse(x$mode != "Train", NA, x$station_start)
   x$station_end <- ifelse(x$mode != "Train", NA, x$station_start)
 

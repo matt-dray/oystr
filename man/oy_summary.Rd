@@ -2,18 +2,26 @@
 % Please edit documentation in R/summary.R
 \name{oy_summary}
 \alias{oy_summary}
-\title{Simple Summary Statistics of Travel}
+\title{Simple Summary Statistics of Oyster Journeys}
 \usage{
 oy_summary(data, mode = "Train")
 }
 \arguments{
-\item{data}{Data frame output from \code{oy_clean()}.}
+\item{data}{Data frame output from \code{link{oy_clean()}}.}
 
-\item{mode}{Currently restricted to "Train".}
+\item{mode}{Currently restricted to \code{"Train"}.}
 }
 \value{
 A list object where each element is some kind of data summary.
 }
 \description{
-Provide simple summaries of your Oyster journey history data.
+Generate simple summaries of your Oyster journey history data for a quick
+overview.
+}
+\examples{
+\dontrun{
+my_df <- oy_read("path/to/folder/")
+my_df_clean <- oy_clean(my_df)
+oy_summary(my_df_clean, mode = "Train")
+}
 }

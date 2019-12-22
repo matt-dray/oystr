@@ -2,19 +2,25 @@
 % Please edit documentation in R/handle.R
 \name{oy_read}
 \alias{oy_read}
-\title{Read Oyster journey history files}
+\title{Read Oyster Journey History Files}
 \usage{
 oy_read(path)
 }
 \arguments{
-\item{path}{A string describing a filepath to a folder of CSVs}
+\item{path}{A string describing a filepath to a folder of Oyster journey
+history CSV files.}
 }
 \value{
-A data.frame object.
+A data.frame object with 8 columns and as many rows as journeys.
 }
 \description{
 Read one or more Oyster journey history files from a single folder
 and combine them. Assumes journey histories are raw CSV files as received
 by email from Transport for London. Ignores files that are not identified
 as Oyster history journey files.
+}
+\examples{
+\dontrun{
+my_df <- oy_read("path/to/folder/")
+}
 }

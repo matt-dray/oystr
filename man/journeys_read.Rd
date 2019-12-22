@@ -4,16 +4,18 @@
 \name{journeys_read}
 \alias{journeys_read}
 \title{Example Oyster Journey History File (Read In)}
-\format{An object of class \code{"data.frame"}.}
+\format{An object of class \code{data.frame}.}
 \source{
-Data generated and received originally from (\href{https://tfl.gov.uk/}{Transport for London}).
+Data generated and received originally from
+    (\href{https://tfl.gov.uk/}{Transport for London}).
 }
 \usage{
 data(journeys_read)
 }
 \description{
 An anonymised example of a single month's journey history data received
-originally as a CSV from Transport for London and read with \code{"oystr::oy_read()"}.
+originally as a CSV from Transport for London and read with
+\code{\link{oy_read()}}.
 }
 \examples{
 data(journeys_read)

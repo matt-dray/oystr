@@ -1,10 +1,18 @@
-#' Simple Summary Statistics of Travel
+#' Simple Summary Statistics of Oyster Journeys
 #'
-#' @description Provide simple summaries of your Oyster journey history data.
-#' @param data Data frame output from \code{oy_clean()}.
-#' @param mode Currently restricted to "Train".
+#' Generate simple summaries of your Oyster journey history data for a quick
+#' overview.
+#'
+#' @param data Data frame output from \code{link{oy_clean()}}.
+#' @param mode Currently restricted to \code{"Train"}.
 #' @return A list object where each element is some kind of data summary.
 #' @export
+#' @examples
+#' \dontrun{
+#' my_df <- oy_read("path/to/folder/")
+#' my_df_clean <- oy_clean(my_df)
+#' oy_summary(my_df_clean, mode = "Train")
+#' }
 
 oy_summary <- function(data, mode = "Train") {
 

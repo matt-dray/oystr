@@ -6,15 +6,16 @@
 \title{Example Oyster Journey History File (Cleaned)}
 \format{An object of class \code{"data.frame"}.}
 \source{
-Data generated and received originally from (\href{https://tfl.gov.uk/}{Transport for London}).
+Data generated and received originally from
+    (\href{https://tfl.gov.uk/}{Transport for London}).
 }
 \usage{
 data(journeys_clean)
 }
 \description{
 An anonymised example of a single month's journey history data received
-originally as a CSV from Transport for London, read with \code{"oystr::oy_read()"}
-and cleaned with \code{"oystr::oy_read()"}.
+originally as a CSV from Transport for London, read with
+\code{\link{oy_read()}} and cleaned with \code{\link{oy_clean()}}.
 }
 \examples{
 data(journeys_clean)
