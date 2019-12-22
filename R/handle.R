@@ -218,7 +218,7 @@ oy_clean <- function(x) {
     strsplit(as.character(x$journey_action), " to "), "[", 2
   )
   x$station_start <- ifelse(x$mode != "Train", NA, x$station_start)
-  x$station_end <- ifelse(x$mode != "Train", NA, x$station_start)
+  x$station_end <- ifelse(x$mode != "Train", NA, x$station_end)
 
   # Bus: extract route
   x$bus_route <- ifelse(
@@ -234,6 +234,9 @@ oy_clean <- function(x) {
     "payment", "charge", "credit", "balance",
     "note"
   )]
+
+  # Sort by journey start
+  x <- x[order(x$datetime_start), ]
 
   # Return the object
   return(x)
