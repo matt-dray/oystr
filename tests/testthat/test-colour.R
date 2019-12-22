@@ -23,8 +23,10 @@ test_that("invalid indices fail", {
   # TODO: negative values should cause an error
 })
 
-test_that("invalid names fail", {
+test_that("input character strings behave as expected", {
   expect_identical(class(oy_cols("line_circle")), "character")
   expect_identical(class(oy_cols("line_circle", "line_victoria")), "character")
   expect_identical(class(oy_cols(c("line_circle", "line_victoria"))), "character")
+  expect_error(oy_cols("invalid_colour_name"))
+  expect_error(oy_cols("line_circle", NA))
 })

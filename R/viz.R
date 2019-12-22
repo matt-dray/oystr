@@ -91,15 +91,11 @@ oy_cols <- function(...) {
   } else if (any(is.na(cols))) {
     stop("Please provide colour names or indices only.")
   } else if (is.numeric(cols) & max(cols) > length(oyster_colours)) {
-    stop(
-      "You've provided an index that's out of range.\n",
-      "Choose only values between 1 and ", length(oy_cols()), "."
-    )
+    stop("You've provided an index that's out of range.\n",
+      "Choose only values between 1 and ", length(oy_cols()), ".")
   } else if (is.character(cols) & !all(cols %in% names(oyster_colours))) {
-    stop(
-      "You've provided an invalid colour name.\n",
-      "See ?oy_cols for details or print colour names with names(oy_cols())."
-    )
+    stop("You've provided an invalid colour name.\n",
+      "See ?oy_cols for details or print colour names with names(oy_cols()).")
   } else if (!is.null(cols)) {
     return(oyster_colours[cols])
   }
@@ -147,7 +143,7 @@ oy_lineplot <- function(
   } else if (!x_var %in% c("datetime_start", "datetime_end")) {
     stop(
       "For now, the x_var argument must be 'datetime_start' or 'datetime_end.\n",
-      "You provided the variable '", y_var, "'."
+      "You provided the variable '", x_var, "'."
     )
   } else if (!y_var %in% c("journey_duration", "balance")) {
     stop(
@@ -165,14 +161,14 @@ oy_lineplot <- function(
     )
   }
 
+  # Eliminate weekends
+  if (weekdays == TRUE) {
+    data <- data[!data$weekday_start %in% c("Saturday", "Sunday"), ]
+  } else { data }
+
   # Wrangle
   df <- data[data$mode == mode, c(x_var, y_var)]  # train only
   df <- df[complete.cases(df), ]  # no rows with NA in x or y
-
-  # Eliminate weekends
-  if (weekdays == TRUE) {
-    df <- df[!df$weekday_start %in% c("Saturday, Sunday"), ]
-  }
 
   # Plot
   plot(

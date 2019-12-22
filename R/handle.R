@@ -70,11 +70,15 @@ oy_read <- function(path) {
 
     # Warnings based on the number of elements removed
     if(count_removed == 1) {
-      warning(paste(count_removed, "CSV file wasn't in the expected format and was discarded."))
+      warning(paste(
+        count_removed,
+        "CSV file wasn't in the expected format and was discarded.")
+      )
     } else if (count_removed > 0) {
-      warning(paste(count_removed, "CSV files weren't in the expected format and were discarded."))
-    } else {
-      stop("None of the CSVs were in the folder were in the expected format.")
+      warning(paste(
+        count_removed,
+        "CSV files weren't in the expected format and were discarded.")
+      )
     }
 
   }
@@ -114,18 +118,16 @@ oy_clean <- function(x) {
   }
 
   # Stop for non-Oyster-journey-history files
-  if(!names(x) %in% c("Date", "Start.Time", "End.Time", "Journey.Action",
-                      "Charge", "Credit", "Balance", "Note")) {
+  input_names <- c(
+    "Date", "Start.Time", "End.Time", "Journey.Action", "Charge", "Credit",
+    "Balance", "Note"
+  )
+  if(!all(names(x) == input_names)) {
     stop(
-      "The input data.frame doesn't look like an Oyster journey history file\n.",
+      "The input data.frame doesn't look like an Oyster journey history file.\n",
       "It should be an unaltered file received from Transport for London.\n",
       "Try reading CSVs with the oy_read() function."
       )
-  }
-
-  # Stop for lack of content
-  if(nrow(x) == 0) {
-    stop("The input data.frame appears to be empty.")
   }
 
   # Meta: make column names lowercase and use underscore instead of period
