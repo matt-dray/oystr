@@ -17,8 +17,7 @@ oy_lineplot(
 \code{\link{oy_clean()}}.}
 
 \item{x_var}{The name of the variable from \code{data} that you want on the x
-axis. This is restricted currently to \code{datetime_start} and
-\code{"datetime_end"}.}
+axis. This is restricted currently to \code{datetime_start}.}
 
 \item{y_var}{The name of the continuous variable from \code{data} for the y
 axis. Choose \code{"journey_duration"} or \code{"balance"}.}

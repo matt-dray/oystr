@@ -110,8 +110,7 @@ oy_cols <- function(...) {
 #' @param data \code{data.frame} of Oyster journey history data cleaned using
 #'     \code{\link{oy_clean()}}.
 #' @param x_var The name of the variable from \code{data} that you want on the x
-#'     axis. This is restricted currently to \code{datetime_start} and
-#'     \code{"datetime_end"}.
+#'     axis. This is restricted currently to \code{datetime_start}.
 #' @param y_var The name of the continuous variable from \code{data} for the y
 #'     axis. Choose \code{"journey_duration"} or \code{"balance"}.
 #' @param weekdays Logical. \code{FALSE} returns data for all days of the week.
@@ -142,7 +141,7 @@ oy_lineplot <- function(
     )
   } else if (!x_var %in% c("datetime_start", "datetime_end")) {
     stop(
-      "For now, the x_var argument must be 'datetime_start' or 'datetime_end.\n",
+      "For now, the x_var argument must be 'datetime_start'.\n",
       "You provided the variable '", x_var, "'."
     )
   } else if (!y_var %in% c("journey_duration", "balance")) {
@@ -174,18 +173,13 @@ oy_lineplot <- function(
   plot(
     x = df[, x_var], y = df[, y_var],
     type = "l", las = 1,
-    xlab = ifelse(x_var == "datetime_start", "Date-time start",
-                  ifelse(x_var == "datetime_start", "Date-time end", "ERROR")
-    ),
+    xlab = "Date-time start",
     ylab = ifelse(y_var == "journey_duration", "Duration (minutes)",
-                  ifelse(y_var == "credit", "Credit (£)",
-                         ifelse(y_var == "balance", "Balance (£)", "ERROR"
-                         )
+                  ifelse(y_var == "balance", "Balance (£)", "ERROR"
                   )
     )
   )
 
-  # Add to plot
   mytitle = paste(mode, "journeys")
   mysubtitle = ifelse(weekdays == TRUE, "Weekdays only", "All days of the week")
   mtext(side = 3, line = 2, adj = 0, cex = 1.2, mytitle)
