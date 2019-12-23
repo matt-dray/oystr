@@ -79,10 +79,10 @@ oy_cols <- function(...) {
     line_district = "#007D32",
     line_northern = "#000000",
 
-    oyster_blue = "#001df2",
-    oyster_cyan = "#00f2f2",
-    legible_london_blue = "061a30",
-    legible_london_yellow = "#f0bb00"
+    oyster_blue = "#001DF2",
+    oyster_cyan = "#00F2F2",
+    legible_london_blue = "#061A30",
+    legible_london_yellow = "#F0BB00"
   )
 
   # Handle input issues
